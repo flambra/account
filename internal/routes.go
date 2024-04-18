@@ -1,0 +1,22 @@
+package internal
+
+import (
+	"os"
+
+	"github.com/flambra/account/internal/middleware"
+	"github.com/flambra/account/internal/user"
+	"github.com/gofiber/fiber/v2"
+)
+
+func InitializeRoutes(app *fiber.App) {
+	app.Get("/", middleware.Auth, func(c *fiber.Ctx) error {
+		return c.Status(200).JSON(fiber.Map{
+			"project":     os.Getenv("PROJECT"),
+			"environment": os.Getenv("ENV"),
+			"version":     os.Getenv("BUILD_VERSION"),
+		})
+	})
+
+	app.Post("/user", middleware.Auth, user.Create)
+
+}
