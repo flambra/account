@@ -18,5 +18,6 @@ func InitializeRoutes(app *fiber.App) {
 	})
 
 	app.Post("/user", middleware.Auth, user.Create)
+	app.Put("/user", middleware.Auth, user.Update)
 
 }

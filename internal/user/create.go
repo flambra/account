@@ -59,15 +59,6 @@ func Create(c *fiber.Ctx) error {
 		Phone:          request.Phone,
 		Address:        request.Address,
 		UserType:       request.UserType,
-		Profile: domain.Profile{
-			Description:     "",
-			Skills:          "",
-			Portfolio:       "",
-			Specializations: "",
-			Availability:    true,
-			Languages:       "",
-			Location:        "",
-		},
 	}
 
 	if err := db.Create(&user).Error; err != nil {
@@ -76,6 +67,19 @@ func Create(c *fiber.Ctx) error {
 			"error": "Error creating user in the database",
 		})
 	}
+
+	profile := domain.Profile{
+        UserID: user.ID,
+    }
+
+    if err := db.Create(&profile).Error; err != nil {
+        log.Fatalln(err)
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error": "Error creating profile in the database",
+        })
+    }
+
+	user.Profile.UserID = user.ID
 
 	return c.Status(fiber.StatusCreated).JSON(&user)
 }
