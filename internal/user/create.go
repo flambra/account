@@ -1,11 +1,12 @@
 package user
 
 import (
-	"log"
-
 	"github.com/flambra/account/database"
-	"github.com/flambra/account/internal/access/domain"
 	"github.com/flambra/account/internal/auth"
+	"github.com/flambra/account/internal/domain"
+	"github.com/flambra/account/internal/profile"
+	"github.com/flambra/helpers/http"
+	"github.com/flambra/helpers/repository"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -24,20 +25,14 @@ func Create(c *fiber.Ctx) error {
 
 	var user domain.User
 	var request UserCreateRequest
+	userRepo := repository.New(database.GetDB(), &user, c)
 
 	if err := c.BodyParser(&request); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Error parsing client data",
-		})
+		return http.BadRequestResponse(c, err.Error())
 	}
 
 	err := ValidateUserCreateRequest(&request, c)
 	if err != nil || c.Response().StatusCode() != 200 {
-		return err
-	}
-
-	hashedPassword, err := auth.EncryptPassword(request.Password)
-	if err != nil {
 		return err
 	}
 
@@ -48,6 +43,11 @@ func Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"error": "Email or Cpf already in use",
 		})
+	}
+
+	hashedPassword, err := auth.EncryptPassword(request.Password)
+	if err != nil {
+		return err
 	}
 
 	user = domain.User{
@@ -61,25 +61,17 @@ func Create(c *fiber.Ctx) error {
 		UserType:       request.UserType,
 	}
 
-	if err := db.Create(&user).Error; err != nil {
-		log.Fatalln(err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Error creating user in the database",
-		})
+	err = userRepo.Create()
+	if err != nil {
+		return http.InternalServerErrorResponse(c, err.Error())
 	}
 
-	profile := domain.Profile{
-        UserID: user.ID,
-    }
-
-    if err := db.Create(&profile).Error; err != nil {
-        log.Fatalln(err)
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "error": "Error creating profile in the database",
-        })
-    }
+	profile.Create(domain.Profile{UserID: user.ID,},c)
+	if err != nil {
+		return http.InternalServerErrorResponse(c, err.Error())
+	}
 
 	user.Profile.UserID = user.ID
 
-	return c.Status(fiber.StatusCreated).JSON(&user)
+	return http.SuccessCreated(c, &user)
 }

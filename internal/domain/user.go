@@ -17,7 +17,7 @@ type User struct {
 	Email          string         `gorm:"size:100;unique;not null"`
 	HashedPassword string         `gorm:"size:255;not null"`
 	Phone          string         `gorm:"size:15;unique"`
-	Address        string         `gorm:"size:255"`
-	UserType       string         `gorm:"size:50;not null"` // "freelancer" or "contractor"
+	Address        string         `gorm:"size:255;not null"`
+	UserType       string         `gorm:"size:50;not null"`
 	Profile        Profile        `gorm:"foreignKey:UserID"`
 }

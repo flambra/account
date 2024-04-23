@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/flambra/account/internal/middleware"
+	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/account/internal/user"
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,6 +19,12 @@ func InitializeRoutes(app *fiber.App) {
 	})
 
 	app.Post("/user", middleware.Auth, user.Create)
-	app.Put("/user", middleware.Auth, user.Update)
+	app.Get("/user/:id", middleware.Auth, user.Read)
+	app.Put("/user/:id", middleware.Auth, user.Update)
+	app.Delete("/user/:id", middleware.Auth, user.Delete)
+
+	app.Get("/profile/:id", middleware.Auth, profile.Read)
+	app.Put("/profile/:id", middleware.Auth, profile.Update)
+	app.Get("/profile", middleware.Auth, profile.Find)
 
 }

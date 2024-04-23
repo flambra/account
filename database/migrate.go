@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 
-	"github.com/flambra/account/internal/access/domain"
+	"github.com/flambra/account/internal/domain"
 )
 
 func Migrate() error {
