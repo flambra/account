@@ -35,7 +35,7 @@ func Delete(c *fiber.Ctx) error {
 		return http.InternalServerErrorResponse(c, err.Error())
 	}
 
-	profile.Delete(domain.Profile{UserID: user.ID,},c)
+	err = profile.Delete(domain.Profile{UserID: user.ID}, c)
 	if err != nil {
 		return http.InternalServerErrorResponse(c, err.Error())
 	}

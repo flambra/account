@@ -66,7 +66,7 @@ func Create(c *fiber.Ctx) error {
 		return http.InternalServerErrorResponse(c, err.Error())
 	}
 
-	profile.Create(domain.Profile{UserID: user.ID,},c)
+	err = profile.Create(domain.Profile{UserID: user.ID}, c)
 	if err != nil {
 		return http.InternalServerErrorResponse(c, err.Error())
 	}

@@ -24,7 +24,7 @@ func Read(c *fiber.Ctx) error {
 	var profile domain.Profile
 	repoprofile := repository.New(database.GetDB(), &profile, c)
 
-	repoprofile.GetById(id)
+	err = repoprofile.GetById(id)
 	if err != nil {
 		return http.InternalServerErrorResponse(c, err.Error())
 	}

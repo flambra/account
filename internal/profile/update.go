@@ -20,7 +20,7 @@ type ProfileUpdateRequest struct {
 	Availability    string `json:"availability,omitempty"`
 	Languages       string `json:"languages,omitempty"`
 	Location        string `json:"location,omitempty"`
-	PhoneType		string `json:"phone_type,omitempty"` 
+	PhoneType       string `json:"phone_type,omitempty"`
 }
 
 func Update(c *fiber.Ctx) error {
@@ -69,7 +69,7 @@ func Update(c *fiber.Ctx) error {
 	// 	})
 	// }
 
-	profileRepo.Save()
+	err = profileRepo.Save()
 	if err != nil {
 		return http.InternalServerErrorResponse(c, err.Error())
 	}
