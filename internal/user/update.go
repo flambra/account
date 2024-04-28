@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/flambra/account/database"
-	"github.com/flambra/account/internal/auth"
 	"github.com/flambra/account/internal/domain"
-	"github.com/flambra/helpers/http"
-	"github.com/flambra/helpers/repository"
+	"github.com/flambra/helpers/hDb"
+	"github.com/flambra/helpers/hPassword"
+	"github.com/flambra/helpers/hRepository"
+	"github.com/flambra/helpers/hResp"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -26,25 +26,25 @@ type UserUpdateRequest struct {
 func Update(c *fiber.Ctx) error {
 	rawId := c.Params("id")
 	if rawId == "" {
-		return http.BadRequestResponse(c, "inform id")
+		return hResp.BadRequestResponse(c, "inform id")
 	}
 
 	id, err := strconv.Atoi(rawId)
 	if err != nil {
-		return http.BadRequestResponse(c, err.Error())
+		return hResp.BadRequestResponse(c, err.Error())
 	}
 
 	var user domain.User
 	var request UserUpdateRequest
-	userRepo := repository.New(database.GetDB(), &user, c)
+	userRepo := hRepository.New(hDb.Get(), &user, c)
 
 	err = userRepo.GetById(id)
 	if err != nil {
-		return http.InternalServerErrorResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
 	if err := c.BodyParser(&request); err != nil {
-		return http.BadRequestResponse(c, err.Error())
+		return hResp.BadRequestResponse(c, err.Error())
 	}
 
 	err = ValidateUserUpdateRequest(&request, &user, c)
@@ -54,12 +54,12 @@ func Update(c *fiber.Ctx) error {
 
 	serialized, err := json.Marshal(&request)
 	if err != nil {
-		return http.InternalServerErrorResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
 	err = json.Unmarshal(serialized, &user)
 	if err != nil {
-		return http.InternalServerErrorResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
 	// var count int64
@@ -70,7 +70,7 @@ func Update(c *fiber.Ctx) error {
 	// 	})
 	// }
 
-	hashedPassword, err := auth.EncryptPassword(request.Password)
+	hashedPassword, err := hPassword.Encrypt(request.Password)
 	if err != nil {
 		return err
 	}
@@ -88,8 +88,8 @@ func Update(c *fiber.Ctx) error {
 
 	err = userRepo.Save()
 	if err != nil {
-		return http.InternalServerErrorResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	return http.SuccessResponse(c, &user)
+	return hResp.SuccessResponse(c, &user)
 }

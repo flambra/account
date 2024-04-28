@@ -1,18 +1,18 @@
 package middleware
 
 import (
-	token "github.com/flambra/helpers/access"
-	"github.com/flambra/helpers/http"
+	"github.com/flambra/helpers/hAuth"
+	"github.com/flambra/helpers/hResp"
 	"github.com/gofiber/fiber/v2"
 )
 
-// Auth creates a middleware to validate the authentication token.
+// Auth creates a middleware to hValidate the authentication token.
 func Auth(c *fiber.Ctx) error {
-	tokenAuthorizer := c.Get("Authorization")
+	token := c.Get("Authorization")
 
-	err := token.ValidateToken(tokenAuthorizer)
+	err := hAuth.ValidateToken(token)
 	if err != nil {
-		return http.UnauthorizedResponse(c, err.Error())
+		return hResp.UnauthorizedResponse(c, err.Error())
 	}
 
 	return c.Next()

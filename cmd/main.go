@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/flambra/account/database"
 	"github.com/flambra/account/internal"
+	"github.com/flambra/account/internal/domain"
+	"github.com/flambra/helpers/hDb"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
@@ -17,12 +18,15 @@ func init() {
 		log.Fatal(err)
 	}
 
-	err = database.NewConnection()
+	err = hDb.New()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = database.Migrate()
+	err = hDb.Migrate(
+		&domain.User{},
+		&domain.Profile{},
+	)
 	if err != nil {
 		log.Fatalf("Failed to migrate the database: %v", err)
 		return

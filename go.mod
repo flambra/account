@@ -1,9 +1,9 @@
 module github.com/flambra/account
 
-go 1.20
+go 1.22
 
 require (
-	github.com/flambra/helpers v0.0.0-20240425031119-d6550bcc571e
+	github.com/flambra/helpers v0.0.0-20240428123922-db728cf55d05
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.22.0

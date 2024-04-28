@@ -1,11 +1,11 @@
 package profile
 
 import (
-	"github.com/flambra/account/database"
 	"github.com/flambra/account/internal/domain"
-	"github.com/flambra/helpers/http"
-	"github.com/flambra/helpers/repository"
-	"github.com/flambra/helpers/types"
+	"github.com/flambra/helpers/hDb"
+	"github.com/flambra/helpers/hRepository"
+	"github.com/flambra/helpers/hResp"
+	"github.com/flambra/helpers/hTypes"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
@@ -15,25 +15,25 @@ func Find(c *fiber.Ctx) error {
 	var profiles []domain.Profile
 	var filter FindProfileFilter
 
-	profileRepo := repository.New(database.GetDB(), &profiles, c)
-	profilePaginator := repository.BuildPaginator(&profiles)
+	profileRepo := hRepository.New(hDb.Get(), &profiles, c)
+	profilePaginator := hRepository.BuildPaginator(&profiles)
 
 	err := c.QueryParser(profilePaginator)
 	if err != nil {
-		return http.BadRequestResponse(c, err.Error())
+		return hResp.BadRequestResponse(c, err.Error())
 	}
 
 	err = c.QueryParser(&filter)
 	if err != nil {
-		return http.BadRequestResponse(c, err.Error())
+		return hResp.BadRequestResponse(c, err.Error())
 	}
 
 	err = profileRepo.FindAllPaginating(&filter, profilePaginator)
 	if err != nil {
-		return http.InternalServerErrorResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	return http.SuccessResponse(c, profilePaginator)
+	return hResp.SuccessResponse(c, profilePaginator)
 
 }
 
@@ -42,8 +42,8 @@ type FindProfileFilter struct {
 	// Email       string     `query:"email"`
 	// TaxNumber   string     `query:"tax_number"`
 	// Phone       string     `query:"phone"`
-	InitialDate types.Date `query:"initialDate"`
-	FinalDate   types.Date `query:"finalDate"`
+	InitialDate hTypes.Date `query:"initialDate"`
+	FinalDate   hTypes.Date `query:"finalDate"`
 }
 
 func (d *FindProfileFilter) Apply(db *gorm.DB) *gorm.DB {
