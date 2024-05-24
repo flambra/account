@@ -4,7 +4,6 @@ import (
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/helpers/hDb"
-	"github.com/flambra/helpers/hPassword"
 	"github.com/flambra/helpers/hRepository"
 	"github.com/flambra/helpers/hResp"
 	"github.com/gofiber/fiber/v2"
@@ -36,18 +35,8 @@ func Create(c *fiber.Ctx) error {
 		return err
 	}
 
-	var count int64
-	db := hDb.Get()
-	db.Model(&domain.User{}).Where("email = ? or tax_number = ?", request.Email, request.TaxNumber).Count(&count)
-	if count > 0 {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-			"error": "Email or Cpf already in use",
-		})
-	}
-
-	hashedPassword, err := hPassword.Encrypt(request.Password)
-	if err != nil {
-		return err
+	if err = userRepo.GetWhere(fiber.Map{"email": request.Email, "tax_number": request.TaxNumber}); err == nil {
+		return hResp.StatusConflict(c, &user, "Email or Cpf already in use")
 	}
 
 	user = domain.User{
@@ -55,7 +44,7 @@ func Create(c *fiber.Ctx) error {
 		LastName:       request.LastName,
 		TaxNumber:      request.TaxNumber,
 		Email:          request.Email,
-		HashedPassword: hashedPassword,
+		HashedPassword: request.Password,
 		Phone:          request.Phone,
 		Address:        request.Address,
 		UserType:       request.UserType,
