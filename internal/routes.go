@@ -3,7 +3,8 @@ package internal
 import (
 	"os"
 
-	"github.com/flambra/account/internal/login"
+	"github.com/flambra/account/internal/auth"
+	"github.com/flambra/account/internal/auth/twoFactor"
 	"github.com/flambra/account/internal/middleware"
 	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/account/internal/user"
@@ -28,5 +29,8 @@ func InitializeRoutes(app *fiber.App) {
 	app.Put("/profile/:id", middleware.Auth, profile.Update)
 	app.Get("/profile", middleware.Auth, profile.Find)
 
-	app.Post("/login", middleware.Auth, login.Auth)
+	app.Post("/auth/signin", middleware.Auth, auth.SignIn)
+	
+	app.Post("/auth/twofactor/send", middleware.Auth, twoFactor.Send)
+	app.Post("/auth/twofactor/validate", middleware.Auth, twoFactor.Validate)
 }

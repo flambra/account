@@ -1,17 +1,18 @@
-package login
+package auth
 
 import (
+	// Fix
+	"github.com/flambra/account/internal/auth/token"
 	"github.com/flambra/account/internal/domain"
-	"github.com/flambra/helpers/hAuth"
 	"github.com/flambra/helpers/hDb"
 	"github.com/flambra/helpers/hRepository"
 	"github.com/flambra/helpers/hResp"
 	"github.com/gofiber/fiber/v2"
 )
 
-func Auth(c *fiber.Ctx) error {
+func SignIn(c *fiber.Ctx) error {
 	var user domain.User
-	var request domain.LoginAuthRequest
+	var request domain.AuthSignInRequest
 	repo := hRepository.New(hDb.Get(), &user, c)
 
 	if err := c.BodyParser(&request); err != nil {
@@ -23,17 +24,12 @@ func Auth(c *fiber.Ctx) error {
 		return hResp.UnauthorizedResponse(c, "Invalid email or password")
 	}
 
-	userAuth := hAuth.User{
-		ID:    int(user.ID), // remove int()
-		Email: user.Email,
-	}
-
-	token, err := hAuth.GenerateJWT(userAuth)
+	token, err := token.Generate(user)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	response := domain.LoginAuthResponse{
+	response := domain.AuthSignInResponse{
 		Token: token,
 	}
 

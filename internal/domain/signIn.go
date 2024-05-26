@@ -1,10 +1,10 @@
 package domain
 
-type LoginAuthRequest struct {
+type AuthSignInRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-type LoginAuthResponse struct {
+type AuthSignInResponse struct {
 	Token string `json:"token"`
 }

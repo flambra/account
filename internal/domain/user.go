@@ -19,5 +19,6 @@ type User struct {
 	Phone          string         `gorm:"size:15;unique"`
 	Address        string         `gorm:"size:255;not null"`
 	UserType       string         `gorm:"size:50;not null"`
-	Profile        Profile        `gorm:"foreignKey:UserID"`
+	LastCode       string
+	Profile        Profile `gorm:"foreignKey:UserID"`
 }
