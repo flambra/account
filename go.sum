@@ -11,6 +11,8 @@ github.com/flambra/helpers v0.0.0-20240524054115-b8687bafcc28 h1:BtnHAEcFf+K1y0p
 github.com/flambra/helpers v0.0.0-20240524054115-b8687bafcc28/go.mod h1:cc+qH23JPYxEM7bJWXkR7wgqpjOc+DqReNXANfwF0mM=
 github.com/flambra/helpers v0.0.0-20240524060205-a4bd7135cd2c h1:Hll7yZ3g0YbBBJAeSnaFi4MoHMtRopR7BKBpJZp0FHM=
 github.com/flambra/helpers v0.0.0-20240524060205-a4bd7135cd2c/go.mod h1:cc+qH23JPYxEM7bJWXkR7wgqpjOc+DqReNXANfwF0mM=
+github.com/flambra/helpers v0.0.0-20240526044013-2dadbcad6885 h1:yGe5TGA4DIXuB0LBzAbJ9KJWKmaWljRUS5s2Iq7/I0E=
+github.com/flambra/helpers v0.0.0-20240526044013-2dadbcad6885/go.mod h1:cc+qH23JPYxEM7bJWXkR7wgqpjOc+DqReNXANfwF0mM=
 github.com/gofiber/fiber/v2 v2.52.4 h1:P+T+4iK7VaqUsq2PALYEfBBo6bJZ4q3FP8cZ84EggTM=
 github.com/gofiber/fiber/v2 v2.52.4/go.mod h1:KEOE+cXMhXG0zHc9d8+E38hoX+ZN7bhOtgeF2oT6jrQ=
 github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=

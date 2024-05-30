@@ -4,7 +4,7 @@ import (
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/helpers/hPassword"
 	"github.com/flambra/helpers/hResp"
-	"github.com/flambra/account/hValidate"
+	"github.com/flambra/helpers/hValidate"
 	"github.com/gofiber/fiber/v2"
 )
 

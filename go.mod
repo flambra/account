@@ -3,7 +3,7 @@ module github.com/flambra/account
 go 1.22
 
 require (
-	github.com/flambra/helpers v0.0.0-20240524060205-a4bd7135cd2c
+	github.com/flambra/helpers v0.0.0-20240526044013-2dadbcad6885
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/joho/godotenv v1.5.1
