@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func ValidateUserCreateRequest(request *UserCreateRequest, c *fiber.Ctx) error {
+func ValidateUserCreateRequest(request *domain.UserCreateRequest, c *fiber.Ctx) error {
 	if request.TaxNumber == "" {
 		return hResp.BadRequestResponse(c, "inform cpf")
 	}
@@ -43,7 +43,7 @@ func ValidateUserCreateRequest(request *UserCreateRequest, c *fiber.Ctx) error {
 	return nil
 }
 
-func ValidateUserUpdateRequest(request *UserUpdateRequest, user *domain.User, c *fiber.Ctx) error {
+func ValidateUserUpdateRequest(request *domain.UserUpdateRequest, user *domain.User, c *fiber.Ctx) error {
 	if request.Email == "" {
 		request.Email = user.Email
 	}
@@ -77,7 +77,7 @@ func validateEmail(email string, c *fiber.Ctx) error {
 	return nil
 }
 
-func validatePassword(request *UserCreateRequest, c *fiber.Ctx) error {
+func validatePassword(request *domain.UserCreateRequest, c *fiber.Ctx) error {
 	if request.Password == "" {
 		return nil
 	}

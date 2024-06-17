@@ -12,17 +12,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type UserUpdateRequest struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	TaxNumber string `json:"tax_number"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	Phone     string `json:"phone"`
-	Address   string `json:"address"`
-	UserType  string `json:"user_type"`
-}
-
 func Update(c *fiber.Ctx) error {
 	rawId := c.Params("id")
 	if rawId == "" {
@@ -35,7 +24,7 @@ func Update(c *fiber.Ctx) error {
 	}
 
 	var user domain.User
-	var request UserUpdateRequest
+	var request domain.UserUpdateRequest
 	userRepo := hRepository.New(hDb.Get(), &user, c)
 
 	err = userRepo.GetById(id)

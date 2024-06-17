@@ -1,0 +1,262 @@
+definitions:
+  domain.Profile:
+    properties:
+      availability:
+        type: boolean
+      avgDelivery:
+        type: number
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      instagramFollowers:
+        type: integer
+      languages:
+        type: string
+      lastDelivery:
+        type: string
+      level:
+        type: integer
+      location:
+        type: string
+      phoneType:
+        type: string
+      portfolio:
+        type: string
+      rating:
+        type: number
+      requests:
+        type: integer
+      returnRate:
+        type: number
+      skills:
+        type: string
+      specializations:
+        type: string
+      successRate:
+        type: number
+      tiktokFollowers:
+        type: integer
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+      youtubeFollowers:
+        type: integer
+    type: object
+  domain.User:
+    properties:
+      address:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      firstName:
+        type: string
+      hashedPassword:
+        type: string
+      id:
+        type: integer
+      lastCode:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      profile:
+        $ref: '#/definitions/domain.Profile'
+      taxNumber:
+        type: string
+      updatedAt:
+        type: string
+      userType:
+        type: string
+    type: object
+  domain.UserCreateRequest:
+    description: User creation request payload
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      tax_number:
+        type: string
+      user_type:
+        type: string
+    type: object
+  domain.UserUpdateRequest:
+    description: User update request payload
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      tax_number:
+        type: string
+      user_type:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  hResp.DefaultResponse:
+    description: Default response structure
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided details
+      parameters:
+      - description: User Create Request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Create a new user
+      tags:
+      - User
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Delete a user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Get a user
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update a user's details by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User Update Request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Update a user
+      tags:
+      - User
+swagger: "2.0"
