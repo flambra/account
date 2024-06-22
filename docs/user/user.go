@@ -1,8 +1,8 @@
 package docs
 
 import (
-	_ "github.com/flambra/account/hResp"
 	_ "github.com/flambra/account/internal/domain"
+	_ "github.com/flambra/helpers/hResp"
 )
 
 // Create godoc

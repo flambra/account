@@ -1,4 +1,30 @@
 definitions:
+  domain.AuthSignInRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  domain.AuthSignInResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  domain.AuthTwoFactorGenerateRequest:
+    properties:
+      method:
+        type: string
+      token:
+        type: string
+    type: object
+  domain.AuthTwoFactorValidateRequest:
+    properties:
+      code:
+        type: string
+      token:
+        type: string
+    type: object
   domain.Profile:
     properties:
       availability:
@@ -78,7 +104,6 @@ definitions:
         type: string
     type: object
   domain.UserCreateRequest:
-    description: User creation request payload
     properties:
       address:
         type: string
@@ -98,7 +123,6 @@ definitions:
         type: string
     type: object
   domain.UserUpdateRequest:
-    description: User update request payload
     properties:
       address:
         type: string
@@ -126,7 +150,6 @@ definitions:
         type: boolean
     type: object
   hResp.DefaultResponse:
-    description: Default response structure
     properties:
       message:
         type: string
@@ -134,6 +157,110 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: Sign in a user with email and password
+      parameters:
+      - description: Auth Sign In Request
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/domain.AuthSignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.AuthSignInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Sign in a user
+      tags:
+      - Auth
+  /auth/twofactor/send:
+    post:
+      consumes:
+      - application/json
+      description: Send a 2FA code to the user's email or phone
+      parameters:
+      - description: TwoFactor Generate Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.AuthTwoFactorGenerateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 2FA code sent successfully
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Send 2FA code
+      tags:
+      - Auth
+  /auth/twofactor/validate:
+    post:
+      consumes:
+      - application/json
+      description: Validate the 2FA code provided by the user
+      parameters:
+      - description: TwoFactor Validate Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.AuthTwoFactorValidateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 2FA code validated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Validate 2FA code
+      tags:
+      - Auth
   /user:
     post:
       consumes:
