@@ -5,9 +5,9 @@ import (
 
 	"github.com/flambra/account/internal/auth"
 	"github.com/flambra/account/internal/auth/twoFactor"
-	"github.com/flambra/account/internal/middleware"
 	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/account/internal/user"
+	"github.com/flambra/helpers/hMiddleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 )
@@ -24,18 +24,18 @@ func InitializeRoutes(app *fiber.App) {
 	// Docs
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	app.Post("/user", middleware.Auth, user.Create)
-	app.Get("/user/:id", middleware.Auth, user.Read)
-	app.Put("/user/:id", middleware.Auth, user.Update)
-	app.Delete("/user/:id", middleware.Auth, user.Delete)
-	app.Get("/users/page", middleware.Auth, user.Page)
+	app.Post("/user", hMiddleware.Auth, user.Create)
+	app.Get("/user/:id", hMiddleware.Auth, user.Read)
+	app.Put("/user/:id", hMiddleware.Auth, user.Update)
+	app.Delete("/user/:id", hMiddleware.Auth, user.Delete)
+	app.Get("/users/page", hMiddleware.Auth, user.Page)
 
-	app.Get("/profile/:id", middleware.Auth, profile.Read)
-	app.Put("/profile/:id", middleware.Auth, profile.Update)
-	app.Get("/profile", middleware.Auth, profile.Find)
+	app.Get("/profile/:id", hMiddleware.Auth, profile.Read)
+	app.Put("/profile/:id", hMiddleware.Auth, profile.Update)
+	app.Get("/profile", hMiddleware.Auth, profile.Find)
 
-	app.Post("/auth/signin", middleware.Auth, auth.SignIn)
+	app.Post("/auth/signin", hMiddleware.Auth, auth.SignIn)
 
-	app.Post("/auth/twofactor/send", middleware.Auth, twoFactor.Send)
-	app.Post("/auth/twofactor/validate", middleware.Auth, twoFactor.Validate)
+	app.Post("/auth/twofactor/send", hMiddleware.Auth, twoFactor.Send)
+	app.Post("/auth/twofactor/validate", hMiddleware.Auth, twoFactor.Validate)
 }
