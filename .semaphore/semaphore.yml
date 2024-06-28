@@ -23,7 +23,6 @@ blocks:
         - name: Docker Build
           commands:
             - echo "Building Docker Image"
-            - docker build -t myapp-builder --target builder .
             - docker build -t myapp:latest .
 
   - name: Run Docker Container
@@ -32,7 +31,7 @@ blocks:
         - name: Docker Run
           commands:
             - echo "Running Docker Container"
-            - docker run -d --name myapp-container -p 8080:8080 myapp:latest
+            - docker run -d --name myapp-container -p 8081:8081 myapp:latest
 
   - name: Health Check
     task:
@@ -41,4 +40,4 @@ blocks:
           commands:
             - echo "Checking Health of the Application"
             - sleep 10 # Wait for the application to start
-            - curl -f http://localhost:8080/home || (echo "Health check failed" && exit 1)
+            - curl -f http://localhost:8081/home || (echo "Health check failed" && exit 1)
