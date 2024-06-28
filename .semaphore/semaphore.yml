@@ -1,0 +1,15 @@
+version: v1.0
+name: "Pipeline Example"
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+
+blocks:
+  - name: "Run Commands"
+    task:
+      jobs:
+        - name: "Execute Shell Commands"
+          commands:
+            - echo "Hello, World!"
+            - echo "This is a Semaphore pipeline example."
