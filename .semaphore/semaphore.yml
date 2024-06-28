@@ -12,6 +12,8 @@ blocks:
       jobs:
         - name: Load .env File
           commands:
+            - pwd
+            - ls -la
             - echo "Loading .env file"
             - cd /home/deploy/projects/configs
             - git pull
