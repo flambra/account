@@ -10,7 +10,6 @@ blocks:
       jobs:
         - name: Load .env File
           commands:
-            - echo $ID_RSA_PRIVATE > ~/.ssh/id_rsa
             - echo "Loading .env file"
             - cd ~/projects/configs
             - git pull
@@ -21,7 +20,6 @@ blocks:
       jobs:
         - name: Docker Build
           commands:
-            - echo $ID_RSA_PRIVATE > ~/.ssh/id_rsa
             - echo "Building Docker Image"
             - git pull
             - docker build -t myapp:latest .
@@ -31,7 +29,6 @@ blocks:
       jobs:
         - name: Docker Run
           commands:
-            - echo $ID_RSA_PRIVATE > ~/.ssh/id_rsa
             - echo "Running Docker Container"
             - docker run -d --name myapp-container -p 8081:8081 myapp:latest
 
