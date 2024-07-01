@@ -10,7 +10,6 @@ blocks:
       jobs:
         - name: Load .env File
           commands:
-            - su deploy
             - pwd
             - ls -la
             - echo "Loading .env file"
