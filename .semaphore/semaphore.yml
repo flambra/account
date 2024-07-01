@@ -10,6 +10,7 @@ blocks:
       jobs:
         - name: Load .env File
           commands:
+            - su dpeloy
             - pwd
             - ls -la
             - echo "Loading .env file"
