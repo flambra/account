@@ -24,7 +24,7 @@ blocks:
           commands:
             - echo "Building Docker Image"
             - git pull
-            - docker build -t myapp:latest .
+            - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
   - name: Run Docker Container
     task:
@@ -32,7 +32,7 @@ blocks:
         - name: Docker Run
           commands:
             - echo "Running Docker Container"
-            - docker run -d --name myapp-container -p 8081:8081 myapp:latest
+            - docker run -d --name $SEMAPHORE_GIT_REPO_NAME -p 8081:8081 $SEMAPHORE_GIT_REPO_NAME:latest
 
   - name: Health Check
     task:
