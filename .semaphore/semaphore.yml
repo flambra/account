@@ -10,19 +10,20 @@ blocks:
       jobs:
         - name: Load .env File
           commands:
-            - pwd
-            - ls -la
+            - echo $ID_RSA_PRIVATE > ~/.ssh/id_rsa
             - echo "Loading .env file"
-            - cd /home/deploy/projects/configs
+            - cd ~/projects/configs
             - git pull
-            - cp account/staging/.env /home/deploy/projects/account/.env
+            - cp account/staging/.env ~/projects/account/.env
 
   - name: Build Docker Image
     task:
       jobs:
         - name: Docker Build
           commands:
+            - echo $ID_RSA_PRIVATE > ~/.ssh/id_rsa
             - echo "Building Docker Image"
+            - git pull
             - docker build -t myapp:latest .
 
   - name: Run Docker Container
@@ -30,6 +31,7 @@ blocks:
       jobs:
         - name: Docker Run
           commands:
+            - echo $ID_RSA_PRIVATE > ~/.ssh/id_rsa
             - echo "Running Docker Container"
             - docker run -d --name myapp-container -p 8081:8081 myapp:latest
 
