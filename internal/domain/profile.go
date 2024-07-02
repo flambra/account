@@ -37,7 +37,7 @@ type ProfileUpdateRequest struct {
 	Skills          string `json:"skills,omitempty"`
 	Portfolio       string `json:"portfolio,omitempty"`
 	Specializations string `json:"specializations,omitempty"`
-	Availability    string `json:"availability,omitempty"`
+	Availability    bool   `json:"availability,omitempty"`
 	Languages       string `json:"languages,omitempty"`
 	Location        string `json:"location,omitempty"`
 	PhoneType       string `json:"phone_type,omitempty"`
