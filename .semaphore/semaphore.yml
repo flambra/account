@@ -16,6 +16,14 @@ blocks:
             - git pull
             - cp $SEMAPHORE_GIT_REPO_NAME/staging/.env ~/projects/$SEMAPHORE_GIT_REPO_NAME/.env
 
+  - name: Remove Old Docker Containers and Images
+    task:
+      jobs:
+        - name: Docker Cleanup
+          commands:
+            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME)
+
   - name: Build Docker Image
     task:
       jobs:
@@ -25,15 +33,6 @@ blocks:
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
-
-  - name: Remove Old Docker Containers and Images
-    task:
-      jobs:
-        - name: Docker Cleanup
-          commands:
-            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
-            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME)
-            - docker image prune -f --filter "label=name=$SEMAPHORE_GIT_REPO_NAME" --filter "dangling=true"
 
   - name: Run Docker Container
     task:
