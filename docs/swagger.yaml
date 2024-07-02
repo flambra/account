@@ -72,6 +72,27 @@ definitions:
       youtubeFollowers:
         type: integer
     type: object
+  domain.ProfileUpdateRequest:
+    properties:
+      availability:
+        type: string
+      description:
+        type: string
+      languages:
+        type: string
+      location:
+        type: string
+      phone_type:
+        type: string
+      portfolio:
+        type: string
+      skills:
+        type: string
+      specializations:
+        type: string
+      userID:
+        type: integer
+    type: object
   domain.User:
     properties:
       address:
@@ -150,6 +171,7 @@ definitions:
         type: boolean
     type: object
   hResp.DefaultResponse:
+    description: Default response structure
     properties:
       message:
         type: string
@@ -261,6 +283,97 @@ paths:
       summary: Validate 2FA code
       tags:
       - Auth
+  /profile/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a profile by ID
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Delete a profile
+      tags:
+      - Profile
+    get:
+      consumes:
+      - application/json
+      description: Get a profile by ID
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Get a profile
+      tags:
+      - Profile
+    put:
+      consumes:
+      - application/json
+      description: Update a profile's details by ID
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Profile Update Request
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ProfileUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Update a profile
+      tags:
+      - Profile
   /user:
     post:
       consumes:
