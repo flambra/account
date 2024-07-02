@@ -21,8 +21,6 @@ blocks:
       jobs:
         - name: Docker Build
           commands:
-            - echo $SEMAPHORE_GIT_COMMIT_RANGE
-            - echo $SEMAPHORE_GIT_COMMITTER
             - echo "Building Docker Image"
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - git pull

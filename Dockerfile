@@ -10,7 +10,7 @@ RUN go mod download && go mod verify
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /bin ./cmd
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app ./cmd
 
 FROM scratch
 
@@ -19,8 +19,8 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group   
 
-COPY --from=builder /bin /bin
+COPY --from=builder /app /app
 
 EXPOSE 8081
 
-CMD ["/bin"]
+CMD ["/app"]
