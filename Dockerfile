@@ -1,6 +1,6 @@
 FROM golang:1.22-alpine AS builder
 
-RUN apk add --no-cache tzdata ca-certificates
+RUN apk add --no-cache tzdata
 
 WORKDIR /app
 
@@ -10,17 +10,16 @@ RUN go mod download && go mod verify
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app ./cmd
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd
 
 FROM scratch
 
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group   
-
 COPY --from=builder /app /app
+COPY --from=builder /app/.env /.env
+
+ENV TZ=America/Sao_Paulo
 
 EXPOSE 8081
 
-CMD ["/app"]
+CMD ["/app/main"]
