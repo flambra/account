@@ -22,7 +22,7 @@ blocks:
         - name: Docker Cleanup
           commands:
             - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
-            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME)
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME) | true
 
   - name: Build Docker Image
     task:
