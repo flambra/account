@@ -26,6 +26,15 @@ blocks:
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
+  - name: Remove Old Docker Containers and Images
+    task:
+      jobs:
+        - name: Docker Cleanup
+          commands:
+            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
+            - docker container prune -f --filter "label=name=$SEMAPHORE_GIT_REPO_NAME"
+            - docker image prune -f --filter "label=name=$SEMAPHORE_GIT_REPO_NAME" --filter "dangling=true"
+
   - name: Run Docker Container
     task:
       jobs:
@@ -33,12 +42,6 @@ blocks:
           commands:
             - echo "Running Docker Container"
             - docker run -d --name $SEMAPHORE_GIT_REPO_NAME -p 8081:8081 $SEMAPHORE_GIT_REPO_NAME:latest
-
-  - name: Health Check
-    task:
-      jobs:
-        - name: Check Application Health
-          commands:
+            - sleep 10
             - echo "Checking Health of the Application"
-            - sleep 10 # Wait for the application to start
-            - curl -f http://localhost:8081/home || (echo "Health check failed" && exit 1)
+            - curl -f curl https://$SEMAPHORE_GIT_REPO_NAME.flambra.com || (echo "Health check failed" && exit 1)

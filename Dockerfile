@@ -14,9 +14,10 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd
 
 FROM scratch
 
+WORKDIR /app
+
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
-COPY --from=builder /app /app
-COPY --from=builder /app/.env /.env
+COPY --from=builder /app .
 
 ENV TZ=America/Sao_Paulo
 

@@ -17,9 +17,13 @@ import (
 )
 
 func init() {
-	err := godotenv.Load("../.env")
+	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
+		err = nil
+		godotenv.Load("../.env")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	err = hDb.New()
