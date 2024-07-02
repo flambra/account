@@ -22,7 +22,9 @@ blocks:
         - name: Docker Cleanup
           commands:
             - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
+            - docker rm -f $(docker ps -a -q -f ancestor=$SEMAPHORE_GIT_REPO_NAME:latest) | true
             - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME) | true
+            - docker image prune -a -f
 
   - name: Build Docker Image
     task:
@@ -40,7 +42,11 @@ blocks:
         - name: Docker Run
           commands:
             - echo "Running Docker Container"
-            - docker run -d -p 8081:8081 $SEMAPHORE_GIT_REPO_NAME:latest
+            - docker run -d -p 8081:8081 --name $SEMAPHORE_GIT_REPO_NAME $SEMAPHORE_GIT_REPO_NAME:latest
             - sleep 10
             - echo "Checking Health of the Application"
-            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com || (echo "Health check failed" && exit 1)
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com || (echo -e "\e[31mHealth check failed\e[0m" && exit 1)
+            - echo "Fetching Docker Logs"
+            - docker logs $SEMAPHORE_GIT_REPO_NAME | tee docker.log
+            - echo "Highlighting Errors in Docker Logs"
+            - grep -i "error" docker.log | sed 's/^/\x1b[31m/' | sed 's/$/\x1b[0m/'
