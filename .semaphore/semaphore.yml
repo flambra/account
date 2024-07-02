@@ -32,7 +32,7 @@ blocks:
         - name: Docker Cleanup
           commands:
             - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
-            - docker container prune -f --filter "label=name=$SEMAPHORE_GIT_REPO_NAME"
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME)
             - docker image prune -f --filter "label=name=$SEMAPHORE_GIT_REPO_NAME" --filter "dangling=true"
 
   - name: Run Docker Container
@@ -41,7 +41,7 @@ blocks:
         - name: Docker Run
           commands:
             - echo "Running Docker Container"
-            - docker run -d --name $SEMAPHORE_GIT_REPO_NAME -p 8081:8081 $SEMAPHORE_GIT_REPO_NAME:latest
+            - docker run -d -p 8081:8081 $SEMAPHORE_GIT_REPO_NAME:latest
             - sleep 10
             - echo "Checking Health of the Application"
             - curl -f curl https://$SEMAPHORE_GIT_REPO_NAME.flambra.com || (echo "Health check failed" && exit 1)
