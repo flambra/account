@@ -11,19 +11,20 @@ blocks:
         - name: Load .env File
           commands:
             - echo $SEMAPHORE_GIT_REPO_NAME
-            - echo $SEMAPHORE_GIT_REPO_SLUG
             - echo "Loading .env file"
             - cd ~/projects/configs
             - git pull
-            - cp account/staging/.env ~/projects/account/.env
+            - cp $SEMAPHORE_GIT_REPO_NAME/staging/.env ~/projects/$SEMAPHORE_GIT_REPO_NAME/.env
 
   - name: Build Docker Image
     task:
       jobs:
         - name: Docker Build
           commands:
+            - echo $SEMAPHORE_GIT_COMMIT_RANGE
+            - echo $SEMAPHORE_GIT_COMMITTER
             - echo "Building Docker Image"
-            - pwd
+            - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
