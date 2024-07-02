@@ -43,4 +43,4 @@ blocks:
             - docker run -d -p 8081:8081 $SEMAPHORE_GIT_REPO_NAME:latest
             - sleep 10
             - echo "Checking Health of the Application"
-            - curl -f curl https://$SEMAPHORE_GIT_REPO_NAME.flambra.com || (echo "Health check failed" && exit 1)
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com || (echo "Health check failed" && exit 1)
