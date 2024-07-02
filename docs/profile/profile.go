@@ -5,20 +5,6 @@ import (
 	_ "github.com/flambra/helpers/hResp"
 )
 
-// Delete godoc
-//
-//	@Summary		Delete a profile
-//	@Description	Delete a profile by ID
-//	@Tags			Profile
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	path		int	true	"Profile ID"
-//	@Success		200	{object}	domain.Profile
-//	@Failure		400	{object}	hResp.DefaultResponse
-//	@Failure		500	{object}	hResp.DefaultResponse
-//	@Router			/profile/{id} [delete]
-func Delete() {}
-
 // Read godoc
 //
 //	@Summary		Get a profile
@@ -47,3 +33,15 @@ func Read() {}
 //	@Failure		500		{object}	hResp.DefaultResponse
 //	@Router			/profile/{id} [put]
 func Update() {}
+// Update godoc
+//
+//	@Summary		List profiles
+//	@Description	List all profiles
+//	@Tags			Profile
+//	@Accept			json
+//	@Produce		json
+//	@Success		200		{object}	domain.FindProfileFilter
+//	@Failure		400		{object}	hResp.DefaultResponse
+//	@Failure		500		{object}	hResp.DefaultResponse
+//	@Router			/prfile [get]
+func List() {}
