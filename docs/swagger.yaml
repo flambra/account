@@ -75,7 +75,7 @@ definitions:
   domain.ProfileUpdateRequest:
     properties:
       availability:
-        type: string
+        type: boolean
       description:
         type: string
       languages:
@@ -283,24 +283,20 @@ paths:
       summary: Validate 2FA code
       tags:
       - Auth
-  /profile/{id}:
-    delete:
+  /profile:
+    get:
       consumes:
       - application/json
-      description: Delete a profile by ID
-      parameters:
-      - description: Profile ID
-        in: path
-        name: id
-        required: true
-        type: integer
+      description: List all profiles
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Profile'
+            items:
+              $ref: '#/definitions/domain.Profile'
+            type: array
         "400":
           description: Bad Request
           schema:
@@ -309,9 +305,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/hResp.DefaultResponse'
-      summary: Delete a profile
+      summary: List profiles
       tags:
       - Profile
+  /profile/{id}:
     get:
       consumes:
       - application/json

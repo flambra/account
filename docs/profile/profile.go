@@ -33,15 +33,15 @@ func Read() {}
 //	@Failure		500		{object}	hResp.DefaultResponse
 //	@Router			/profile/{id} [put]
 func Update() {}
-// Update godoc
+// 	List godoc
 //
-//	@Summary		List profiles
-//	@Description	List all profiles
-//	@Tags			Profile
-//	@Accept			json
-//	@Produce		json
-//	@Success		200		{object}	domain.FindProfileFilter
-//	@Failure		400		{object}	hResp.DefaultResponse
-//	@Failure		500		{object}	hResp.DefaultResponse
-//	@Router			/prfile [get]
+// 	@Summary List profiles
+// 	@Description List all profiles
+// 	@Tags Profile
+// 	@Accept json
+// 	@Produce json
+// 	@Success 200 {array} domain.Profile
+// 	@Failure 400 {object} hResp.DefaultResponse
+// 	@Failure 500 {object} hResp.DefaultResponse
+// 	@Router /profile [get]
 func List() {}
