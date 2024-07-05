@@ -23,6 +23,7 @@ blocks:
           commands:
             - echo "Renaming current Docker image to rollback"
             - docker tag $SEMAPHORE_GIT_REPO_NAME:latest $SEMAPHORE_GIT_REPO_NAME:rollback
+            
   - name: Build Docker Image
     task:
       jobs:
@@ -42,6 +43,8 @@ blocks:
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - docker compose up -d
             - sleep 10
+        - name: Health Check
+          commands:
             - echo "Checking Health of the Application"
             - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
