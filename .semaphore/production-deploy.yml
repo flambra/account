@@ -1,5 +1,5 @@
 version: v1.0
-name: Deploy Pipeline
+name: Deploy Production
 
 agent:
   machine:
