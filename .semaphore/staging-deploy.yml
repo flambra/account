@@ -56,8 +56,8 @@ blocks:
   - name: Rollback
     run:
       when: "true"
-    tasks:
-      jobs:
-        - name: "Rollback service"
-          commands:
-            - echo "Rolling back to the previous version"
+        tasks:
+          jobs:
+            - name: "Rollback service"
+              commands:
+                - echo "Rolling back to the previous version"
