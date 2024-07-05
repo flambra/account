@@ -1,11 +1,19 @@
 version: v1.0
 name: Promotion
+
 agent:
   machine:
     type: s1-server-1
+
+blocks:
+  - name: Promotions
+    task:
+      jobs:
+        - name: Promotion to Prodution or Staging
+
 promotions:
   - name: Production deploy
-    pipeline_file: production-deploy.yml
+    pipeline_file: staging-deploy.yml
     auto_promote:
       when: "branch = 'main'"
 
