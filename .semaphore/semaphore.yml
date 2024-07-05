@@ -46,7 +46,7 @@ blocks:
             - docker compose up -d
             - sleep 10
             - echo "Checking Health of the Application"
-            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "/n\e[32mHealth test passed\e[0m") || (echo -e "/n\e[31mHealth test failed\e[0m")
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
         on_fail:
           commands:
