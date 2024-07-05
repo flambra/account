@@ -61,7 +61,8 @@ blocks:
             commands:
               - echo "Collecting Docker Logs"
               - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
-        
-          - name: Rollback Deploy
-            commands:
-              - echo "Running Docker Container"
+              - docker tag $SEMAPHORE_GIT_REPO_NAME:rollback $SEMAPHORE_GIT_REPO_NAME:latest
+              - docker compose up -d
+              - sleep 10
+              - echo "Checking Health of the Rollback Application"
+              - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.co/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
