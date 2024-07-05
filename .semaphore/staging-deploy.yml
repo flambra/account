@@ -54,10 +54,10 @@ blocks:
             - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
 
   - name: Rollback
+    run:
+      when: "true"
     tasks:
       jobs:
         - name: "Rollback service"
-            run:
-              when: "result = 'failed'"
           commands:
             - echo "Rolling back to the previous version"
