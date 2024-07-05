@@ -1,3 +1,0 @@
-/app
-/usr/share/zoneinfo
-/.env
