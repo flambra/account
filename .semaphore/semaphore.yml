@@ -36,21 +36,6 @@ blocks:
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
-  # - name: Run Docker Container
-  #   task:
-  #     jobs:
-  #       - name: Docker Run
-  #         commands:
-  #           - echo "Running Docker Container"
-  #           - docker run -d -p 8081:8081 --name $SEMAPHORE_GIT_REPO_NAME $SEMAPHORE_GIT_REPO_NAME:latest
-  #           - sleep 10
-  #           - echo "Checking Health of the Application"
-  #           - if curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com; then echo -e "\e[32mHealth check passed\e[0m" && exit 0; else echo -e "\e[31mHealth check failed\e[0m"; fi
-  #           - echo "Fetching Docker Logs"
-  #           - docker logs $SEMAPHORE_GIT_REPO_NAME | tee docker.log
-  #           - echo "Highlighting Errors in Docker Logs"
-  #           - grep -i "error" docker.log | sed 's/^/\x1b[31m/' | sed 's/$/\x1b[0m/'
-
     - name: Run Docker Container
     task:
       jobs:
@@ -64,3 +49,4 @@ blocks:
             - if curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com; then echo -e "\e[32mHealth check passed\e[0m" && exit 0; else echo -e "\e[31mHealth check failed\e[0m"; fi
             - echo "Docker Logs"
             - docker compose logs $SEMAPHORE_GIT_REPO_NAME
+            - exit 1
