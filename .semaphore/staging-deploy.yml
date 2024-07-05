@@ -57,7 +57,6 @@ blocks:
             - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.co/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
         on_fail:
-          - name: Collect Docker Logs
             commands:
               - echo "Collecting Docker Logs"
               - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
