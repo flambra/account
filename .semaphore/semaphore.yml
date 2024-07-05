@@ -10,7 +10,7 @@ blocks:
       jobs:
         - name: Promotion to Prodution or Staging
           commands:
-            - Promotion of $SEMAPHORE_GIT_REPO_NAME
+            - echo "Promotion of $SEMAPHORE_GIT_REPO_NAME"
 
 promotions:
   - name: Production deploy
