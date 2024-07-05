@@ -4,7 +4,6 @@ name: Promotion
 agent:
   machine:
     type: s1-server-1
-
 blocks:
   - name: Promotions
     task:

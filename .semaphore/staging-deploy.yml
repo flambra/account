@@ -53,7 +53,6 @@ blocks:
             - echo "Collecting Docker Logs"
             - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
 
-blocks:
   - name: Rollback
     run:
       when: "result = 'failed'"
