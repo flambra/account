@@ -1,0 +1,64 @@
+version: v1.0
+name: Deploy Pipeline
+
+agent:
+  machine:
+    type: s1-server-1
+blocks:
+  - name: Load Configs
+    task:
+      jobs:
+        - name: Load .env File
+          commands:
+            - echo $SEMAPHORE_GIT_REPO_NAME
+            - echo "Loading .env file"
+            - cd ~/projects/configs
+            - git pull
+            - cp $SEMAPHORE_GIT_REPO_NAME/staging/.env ~/projects/$SEMAPHORE_GIT_REPO_NAME/.env
+
+  - name: Remove Old Docker Containers and Images
+    task:
+      jobs:
+        - name: Docker Cleanup
+          commands:
+            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
+            - docker rm -f $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest) | true
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:latest) | true
+            - docker image prune -a -f
+
+  - name: Build Docker Image
+    task:
+      jobs:
+        - name: Docker Build
+          commands:
+            - echo "Building Docker Image"
+            - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
+            - git pull
+            - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
+
+  - name: Run Docker Container
+    task:
+      jobs:
+        - name: Docker Run
+          commands:
+            - echo "Running Docker Container"
+            - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
+            - docker compose up -d
+            - sleep 10
+            - echo "Checking Health of the Application"
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.co/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
+      epilogue:
+        on_fail:
+          commands:
+            - echo "Collecting Docker Logs"
+            - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
+
+blocks:
+  - name: Rollback
+    run:
+      when: "result = 'failed'"
+    tasks:
+      jobs:
+        - name: "Rollback service"
+          commands:
+            - echo "Rolling back to the previous version"
