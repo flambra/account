@@ -5,10 +5,12 @@ agent:
   machine:
     type: s1-server-1
 blocks:
-  - name: Promotions
+  - name: Promotion
     task:
       jobs:
         - name: Promotion to Prodution or Staging
+          commands:
+            - Promotion of $SEMAPHORE_GIT_REPO_NAME
 
 promotions:
   - name: Production deploy
