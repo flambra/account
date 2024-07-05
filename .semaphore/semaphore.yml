@@ -9,6 +9,8 @@ blocks:
     task:
       jobs:
         - name: Promotion to Prodution or Staging
+        commands:
+            - echo $SEMAPHORE_GIT_REPO_NAME
 
 promotions:
   - name: Production deploy
