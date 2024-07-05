@@ -23,17 +23,6 @@ blocks:
           commands:
             - echo "Renaming current Docker image to rollback"
             - docker tag $SEMAPHORE_GIT_REPO_NAME:latest $SEMAPHORE_GIT_REPO_NAME:rollback
-
-  # - name: Remove Old Docker Containers and Images
-  #   task:
-  #     jobs:
-  #       - name: Docker Cleanup
-  #         commands:
-  #           - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
-  #           - docker rm -f $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest) | true
-  #           - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:latest) | true
-  #           - docker image prune -a -f
-
   - name: Build Docker Image
     task:
       jobs:
@@ -54,7 +43,7 @@ blocks:
             - docker compose up -d
             - sleep 10
             - echo "Checking Health of the Application"
-            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.co/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
         on_fail:
             commands:
@@ -64,4 +53,13 @@ blocks:
               - docker compose up -d
               - sleep 10
               - echo "Checking Health of the Rollback Application"
-              - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.co/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
+              - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
+
+  - name: Remove Old Docker Images
+    task:
+      jobs:
+        - name: Docker Cleanup
+          commands:
+            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:rollback) | true
+            - docker image prune -a -f
