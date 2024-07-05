@@ -46,14 +46,9 @@ blocks:
             - docker compose up -d
             - sleep 10
             - echo "Checking Health of the Application"
-            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ || (echo "Health check failed" && false)
-      
-  - name: Logs
-    task:
-      conditions:
-        - failure
-      jobs:
-        - name: Collect Logs
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m")
+      epilogue:
+        on_fail:
           commands:
             - echo "Collecting Docker Logs"
             - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
