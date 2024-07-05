@@ -9,7 +9,7 @@ blocks:
     task:
       jobs:
         - name: Promotion to Prodution or Staging
-        commands:
+          commands:
             - echo $SEMAPHORE_GIT_REPO_NAME
 
 promotions:
