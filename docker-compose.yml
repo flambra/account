@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   account:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: account:latest
     ports:
       - "8081:8081"
     environment:
