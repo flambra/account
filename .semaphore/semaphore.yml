@@ -14,7 +14,7 @@ blocks:
 
 promotions:
   - name: Production deploy
-    pipeline_file: staging-deploy.yml
+    pipeline_file: production-deploy.yml
     auto_promote:
       when: "branch = 'main'"
 
