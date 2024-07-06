@@ -3,28 +3,25 @@ name: Deploy Production
 
 agent:
   machine:
-    type: s1-server-2
+    type: s1-server-1
 blocks:
   - name: Load Configs
     task:
       jobs:
         - name: Load .env File
           commands:
-            - echo $SEMAPHORE_GIT_REPO_NAME
             - echo "Loading .env file"
             - cd ~/projects/configs
             - git pull
             - cp $SEMAPHORE_GIT_REPO_NAME/production/.env ~/projects/$SEMAPHORE_GIT_REPO_NAME/.env
 
-  - name: Remove Old Docker Containers and Images
+  - name: Rename Current Docker Image
     task:
       jobs:
-        - name: Docker Cleanup
+        - name: Docker Rename
           commands:
-            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
-            - docker rm -f $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest) | true
-            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:latest) | true
-            - docker image prune -a -f
+            - echo "Renaming current Docker image to rollback"
+            - docker tag $SEMAPHORE_GIT_REPO_NAME:latest $SEMAPHORE_GIT_REPO_NAME:rollback
 
   - name: Build Docker Image
     task:
@@ -33,10 +30,11 @@ blocks:
           commands:
             - echo "Building Docker Image"
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
+            - git checkout $SEMAPHORE_GIT_BRANCH
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
-  - name: Run Docker Container
+  - name: Start Application
     task:
       jobs:
         - name: Docker Run
@@ -45,6 +43,10 @@ blocks:
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - docker compose up -d
             - sleep 10
+        - name: Health Check
+          commands:
+            - echo "Running Health Check"
+            - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - echo "Checking Health of the Application"
             - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
@@ -52,3 +54,17 @@ blocks:
           commands:
             - echo "Collecting Docker Logs"
             - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
+            - docker tag $SEMAPHORE_GIT_REPO_NAME:rollback $SEMAPHORE_GIT_REPO_NAME:latest
+            - docker compose up -d
+            - sleep 10
+            - echo "Checking Health of the Rollback Application"
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
+
+  - name: Remove Old Docker Images
+    task:
+      jobs:
+        - name: Docker Cleanup
+          commands:
+            - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:rollback) | true
+            - docker image prune -a -f

@@ -8,9 +8,9 @@ blocks:
   - name: Promotion
     task:
       jobs:
-        - name: Promotion to Prodution or Staging
+        - name: 'Promotion to branch: $SEMAPHORE_GIT_BRANCH'
           commands:
-            - echo "Promotion of $SEMAPHORE_GIT_REPO_NAME"
+            - echo "Promotion of $SEMAPHORE_GIT_REPO_NAME on branch $SEMAPHORE_GIT_BRANCH"
 
 promotions:
   - name: Production deploy

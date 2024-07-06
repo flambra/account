@@ -10,7 +10,6 @@ blocks:
       jobs:
         - name: Load .env File
           commands:
-            - echo $SEMAPHORE_GIT_REPO_NAME
             - echo "Loading .env file"
             - cd ~/projects/configs
             - git pull
@@ -31,6 +30,7 @@ blocks:
           commands:
             - echo "Building Docker Image"
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
+            - git checkout $SEMAPHORE_GIT_BRANCH
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
