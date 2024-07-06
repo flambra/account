@@ -34,7 +34,7 @@ blocks:
             - git pull
             - docker build -t $SEMAPHORE_GIT_REPO_NAME:latest .
 
-  - name: Run Docker Container
+  - name: Start Application
     task:
       jobs:
         - name: Docker Run
@@ -51,16 +51,14 @@ blocks:
             - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
         on_fail:
-          jobs:
-            - name: teste
-              commands:
-                - echo "Collecting Docker Logs"
-                - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
-                - docker tag $SEMAPHORE_GIT_REPO_NAME:rollback $SEMAPHORE_GIT_REPO_NAME:latest
-                - docker compose up -d
-                - sleep 10
-                - echo "Checking Health of the Rollback Application"
-                - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
+          commands:
+            - echo "Collecting Docker Logs"
+            - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
+            - docker tag $SEMAPHORE_GIT_REPO_NAME:rollback $SEMAPHORE_GIT_REPO_NAME:latest
+            - docker compose up -d
+            - sleep 10
+            - echo "Checking Health of the Rollback Application"
+            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
 
   - name: Remove Old Docker Images
     task:
