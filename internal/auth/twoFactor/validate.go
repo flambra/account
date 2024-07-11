@@ -1,11 +1,11 @@
 package twoFactor
 
 import (
-	"github.com/flambra/account/internal/auth/token"
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/helpers/hDb"
 	"github.com/flambra/helpers/hRepository"
 	"github.com/flambra/helpers/hResp"
+	"github.com/flambra/helpers/hToken"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -16,15 +16,19 @@ func Validate(c *fiber.Ctx) error {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
 
-	claims, err := token.Validate(request.Token)
+	claims, err := hToken.Parse(request.Token)
 	if err != nil {
-		return hResp.UnauthorizedResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
+	}
+
+	userID, ok := claims["user_id"].(float64)
+	if !ok {
+		return hResp.InternalServerErrorResponse(c, "UserID not found in token data")
 	}
 
 	var user domain.User
 	repo := hRepository.New(hDb.Get(), &user, nil)
-	
-	err = repo.GetById(claims.UserID)
+	err = repo.GetById(int(userID))
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

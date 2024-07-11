@@ -34,7 +34,8 @@ func InitializeRoutes(app *fiber.App) {
 	app.Put("/profile/:id", hMiddleware.Auth, profile.Update)
 	app.Get("/profile", hMiddleware.Auth, profile.Find)
 
-	app.Post("/auth/signin", hMiddleware.Auth, auth.SignIn)
+	app.Post("/auth/signin", auth.SignIn)
+	app.Post("/auth/refreshtoken", auth.RefreshToken)
 
 	app.Post("/auth/twofactor/send", hMiddleware.Auth, twoFactor.Send)
 	app.Post("/auth/twofactor/validate", hMiddleware.Auth, twoFactor.Validate)

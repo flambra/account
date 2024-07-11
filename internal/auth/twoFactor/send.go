@@ -3,11 +3,11 @@ package twoFactor
 import (
 	"os"
 
-	"github.com/flambra/account/internal/auth/token"
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/helpers/hAuth"
 	"github.com/flambra/helpers/hReq"
 	"github.com/flambra/helpers/hResp"
+	"github.com/flambra/helpers/hToken"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,9 +18,19 @@ func Send(c *fiber.Ctx) error {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
 
-	claims, err := token.Validate(request.Token)
+	claims, err := hToken.Parse(request.Token)
 	if err != nil {
-		return hResp.UnauthorizedResponse(c, err.Error())
+		return hResp.InternalServerErrorResponse(c, err.Error())
+	}
+
+	email, ok := claims["email"].(string)
+	if !ok {
+		return hResp.InternalServerErrorResponse(c, "Email not found in token data")
+	}
+
+	phone, ok := claims["phone"].(string)
+	if !ok {
+		return hResp.InternalServerErrorResponse(c, "Phone not found in token data")
 	}
 
 	code := GenerateCode()
@@ -38,11 +48,11 @@ func Send(c *fiber.Ctx) error {
 
 	switch request.Method {
 	case "email":
-		senderRequest.To = claims.Email
+		senderRequest.To = email
 		senderRequest.TemplateName = os.Getenv("SENDER_EMAIL_TEMPLATE_NAME")
 		url += "/email/send"
 	case "sms":
-		senderRequest.To = claims.Phone
+		senderRequest.To = phone
 		senderRequest.TemplateName = os.Getenv("SENDER_SMS_TEMPLATE_NAME")
 		url += "/sms/send"
 	default:
@@ -60,7 +70,7 @@ func Send(c *fiber.Ctx) error {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	if err := Update(*claims, code); err != nil {
+	if err := Update(claims, code); err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
