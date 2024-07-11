@@ -15,6 +15,63 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/refreshtoken": {
+            "post": {
+                "description": "Refresh an access token using a refresh token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh an access token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "description": "Refresh Token Request",
+                        "name": "request",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/hToken.Access"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hToken.Access"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/signin": {
             "post": {
                 "description": "Sign in a user with email and password",
@@ -41,9 +98,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Access token generated successfully",
                         "schema": {
-                            "$ref": "#/definitions/domain.AuthSignInResponse"
+                            "$ref": "#/definitions/hToken.Access"
                         }
                     },
                     "400": {
@@ -509,14 +566,6 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.AuthSignInResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
         "domain.AuthTwoFactorGenerateRequest": {
             "type": "object",
             "properties": {
@@ -767,7 +816,21 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "hToken.Access": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
         }
+    },
+    "externalDocs": {
+        "url": "https://github.com/flambra/account"
     }
 }`
 
@@ -777,8 +840,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Flambra Account API",
+	Description:      "This API is for the Flambra Account service.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

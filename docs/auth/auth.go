@@ -3,7 +3,12 @@ package docs
 import (
 	_ "github.com/flambra/account/internal/domain"
 	_ "github.com/flambra/helpers/hResp"
+	_ "github.com/flambra/helpers/hToken"
 )
+
+//	@title						Flambra Account API
+//	@description				This API is for the Flambra Account service.
+//	@externalDocs.url			https://github.com/flambra/account
 
 // SignIn godoc
 //
@@ -13,12 +18,28 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			auth	body		domain.AuthSignInRequest	true	"Auth Sign In Request"
-//	@Success		200		{object}	domain.AuthSignInResponse
+//	@Success		200		{object}	hToken.Access				"Access token generated successfully"
 //	@Failure		400		{object}	hResp.DefaultResponse
 //	@Failure		401		{object}	hResp.DefaultResponse
 //	@Failure		500		{object}	hResp.DefaultResponse
 //	@Router			/auth/signin [post]
 func SignIn() {}
+
+// RefreshToken godoc
+//
+//	@Summary		Refresh an access token
+//	@Description	Refresh an access token using a refresh token
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string			false	"Bearer <access token>"
+//	@Param			request			body		hToken.Access	false	"Refresh Token Request"
+//	@Success		200				{object}	hToken.Access
+//	@Failure		400				{object}	hResp.DefaultResponse
+//	@Failure		401				{object}	hResp.DefaultResponse
+//	@Failure		500				{object}	hResp.DefaultResponse
+//	@Router			/auth/refreshtoken [post]
+func RefreshToken() {}
 
 // Send godoc
 //

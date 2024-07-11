@@ -35,13 +35,13 @@ func Read() {}
 func Update() {}
 // 	List godoc
 //
-// 	@Summary List profiles
-// 	@Description List all profiles
-// 	@Tags Profile
-// 	@Accept json
-// 	@Produce json
-// 	@Success 200 {array} domain.Profile
-// 	@Failure 400 {object} hResp.DefaultResponse
-// 	@Failure 500 {object} hResp.DefaultResponse
-// 	@Router /profile [get]
+//	@Summary		List profiles
+//	@Description	List all profiles
+//	@Tags			Profile
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		domain.Profile
+//	@Failure		400	{object}	hResp.DefaultResponse
+//	@Failure		500	{object}	hResp.DefaultResponse
+//	@Router			/profile [get]
 func List() {}

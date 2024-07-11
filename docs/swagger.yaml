@@ -6,11 +6,6 @@ definitions:
       password:
         type: string
     type: object
-  domain.AuthSignInResponse:
-    properties:
-      token:
-        type: string
-    type: object
   domain.AuthTwoFactorGenerateRequest:
     properties:
       method:
@@ -176,9 +171,57 @@ definitions:
       message:
         type: string
     type: object
+  hToken.Access:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+externalDocs:
+  url: https://github.com/flambra/account
 info:
   contact: {}
+  description: This API is for the Flambra Account service.
+  title: Flambra Account API
 paths:
+  /auth/refreshtoken:
+    post:
+      consumes:
+      - application/json
+      description: Refresh an access token using a refresh token
+      parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
+      - description: Refresh Token Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/hToken.Access'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hToken.Access'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Refresh an access token
+      tags:
+      - Auth
   /auth/signin:
     post:
       consumes:
@@ -195,9 +238,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Access token generated successfully
           schema:
-            $ref: '#/definitions/domain.AuthSignInResponse'
+            $ref: '#/definitions/hToken.Access'
         "400":
           description: Bad Request
           schema:
