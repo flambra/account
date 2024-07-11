@@ -3,7 +3,7 @@ module github.com/flambra/account
 go 1.22
 
 require (
-	github.com/flambra/helpers v0.0.0-20240710185940-785082604715
+	github.com/flambra/helpers v0.0.0-20240711015627-fd129fea2a32
 	github.com/gofiber/contrib/fibernewrelic v1.2.2
 	github.com/gofiber/contrib/fiberzerolog v1.0.1
 	github.com/gofiber/fiber/v2 v2.52.4

@@ -1,25 +1,39 @@
 package auth
 
 import (
-	"github.com/flambra/account/internal/domain"
+	"strings"
+
 	"github.com/flambra/helpers/hResp"
 	"github.com/flambra/helpers/hToken"
 	"github.com/gofiber/fiber/v2"
 )
 
 func RefreshToken(c *fiber.Ctx) error {
-	var request domain.AuthRefreshTokenRequest
-
-	if err := c.BodyParser(&request); err != nil {
-		return hResp.BadRequestResponse(c, err.Error())
+	token := c.Get("Authorization")
+	if token != "" {
+		parts := strings.Split(token, " ")
+		if len(parts) != 2 {
+			return hResp.BadRequestResponse(c, "Token error")
+		}
+		scheme := parts[0]
+		token = parts[1]
+		if !strings.EqualFold(scheme, "Bearer") {
+			return hResp.BadRequestResponse(c, "Token malformatted")
+		}
+	} else {
+		var request hToken.Access
+		if err := c.BodyParser(&request); err != nil {
+			return hResp.BadRequestResponse(c, err.Error())
+		}
+		token = request.RefreshToken
 	}
 
-	err := hToken.Validate(request.RefreshToken)
+	err := hToken.Validate(token)
 	if err != nil {
 		return hResp.UnauthorizedResponse(c, err.Error())
 	}
 
-	data, err := hToken.Parse(request.RefreshToken)
+	data, err := hToken.Parse(token)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

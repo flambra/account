@@ -5,15 +5,6 @@ type AuthSignInRequest struct {
 	Password string `json:"password"`
 }
 
-type AuthSignInResponse struct {
-	Token        string `json:"token"`
-	RefreshToken string `json:"refresh_token"`
-}
-
-type AuthRefreshTokenRequest struct {
-	RefreshToken string `json:"refresh_token"`
-}
-
 type AuthTwoFactorGenerateRequest struct {
 	Token  string `json:"token"`
 	Method string `json:"method"`

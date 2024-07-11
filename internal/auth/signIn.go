@@ -34,7 +34,7 @@ func SignIn(c *fiber.Ctx) error {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	response := domain.AuthSignInResponse{
+	response := hToken.Access{
 		Token:        access.Token,
 		RefreshToken: access.RefreshToken,
 	}
