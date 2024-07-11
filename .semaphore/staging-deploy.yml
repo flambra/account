@@ -21,7 +21,7 @@ blocks:
         - name: Docker Rename
           commands:
             - echo "Renaming current Docker image to rollback"
-            - docker tag $SEMAPHORE_GIT_REPO_NAME:latest $SEMAPHORE_GIT_REPO_NAME:rollback
+            - docker tag $SEMAPHORE_GIT_REPO_NAME:latest $SEMAPHORE_GIT_REPO_NAME:rollback || true
 
   - name: Build Docker Image
     task:
@@ -48,17 +48,17 @@ blocks:
             - echo "Running Health Check"
             - cd ~/projects/$SEMAPHORE_GIT_REPO_NAME
             - echo "Checking Health of the Application"
-            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
+            - curl -f https://stg.$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mHealth test passed\e[0m") || (echo -e "\e[31mHealth test failed\e[0m" && exit 1)
       epilogue:
         on_fail:
           commands:
             - echo "Collecting Docker Logs"
-            - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest)
-            - docker tag $SEMAPHORE_GIT_REPO_NAME:rollback $SEMAPHORE_GIT_REPO_NAME:latest
+            - docker logs $(docker ps -a -q --filter ancestor=$SEMAPHORE_GIT_REPO_NAME:latest) || true
+            - docker tag $SEMAPHORE_GIT_REPO_NAME:rollback $SEMAPHORE_GIT_REPO_NAME:latest || true
             - docker compose up -d
             - sleep 10
             - echo "Checking Health of the Rollback Application"
-            - curl -f https://$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
+            - curl -f https://stg.$SEMAPHORE_GIT_REPO_NAME.flambra.com/ && (echo -e "\e[32mRollback health test passed\e[0m") || (echo -e "\e[31mRollback health test failed\e[0m" && exit 1)
 
   - name: Remove Old Docker Images
     task:
@@ -66,5 +66,5 @@ blocks:
         - name: Docker Cleanup
           commands:
             - echo "Removing old Docker containers and images for $SEMAPHORE_GIT_REPO_NAME"
-            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:rollback) | true
+            - docker rmi $(docker images -q $SEMAPHORE_GIT_REPO_NAME:rollback) || true
             - docker image prune -a -f
