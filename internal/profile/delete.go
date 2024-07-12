@@ -9,14 +9,14 @@ import (
 )
 
 func Delete(profile domain.Profile, c *fiber.Ctx) error {
-	profileRepo := hRepository.New(hDb.Get(), &profile, c)
+	repo := hRepository.New(hDb.Get(), &profile, c)
 
-	err := profileRepo.Delete(int(profile.UserID))
+	err := repo.Delete(int(profile.UserID))
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	err = profileRepo.GetDeleted(fiber.Map{"user_id": int(profile.UserID)})
+	err = repo.GetDeleted(fiber.Map{"user_id": int(profile.UserID)})
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

@@ -15,7 +15,7 @@ func Find(c *fiber.Ctx) error {
 	var profiles []domain.Profile
 	var filter FindProfileFilter
 
-	profileRepo := hRepository.New(hDb.Get(), &profiles, c)
+	repo := hRepository.New(hDb.Get(), &profiles, c)
 	profilePaginator := hRepository.BuildPaginator(&profiles)
 
 	err := c.QueryParser(profilePaginator)
@@ -28,7 +28,7 @@ func Find(c *fiber.Ctx) error {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
 
-	err = profileRepo.FindAllPaginating(&filter, profilePaginator)
+	err = repo.FindAllPaginating(&filter, profilePaginator)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

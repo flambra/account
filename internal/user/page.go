@@ -10,10 +10,9 @@ import (
 
 func Page(c *fiber.Ctx) error {
 	var response []domain.UserPageResponse
-	var user []domain.User
-	var filter domain.UserPageFilter
-
 	paginator := hRepository.BuildPaginator(&response)
+
+	var user []domain.User
 	repo := hRepository.New(hDb.Get(), &user, c)
 
 	err := c.QueryParser(paginator)
@@ -21,6 +20,7 @@ func Page(c *fiber.Ctx) error {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
 
+	var filter domain.UserPageFilter
 	err = c.QueryParser(&filter)
 	if err != nil {
 		return hResp.BadRequestResponse(c, err.Error())

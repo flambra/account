@@ -22,9 +22,9 @@ func Read(c *fiber.Ctx) error {
 	}
 
 	var user domain.User
-	userRepo := hRepository.New(hDb.Get(), &user, c)
+	repo := hRepository.New(hDb.Get(), &user, c)
 
-	err = userRepo.GetById(id)
+	err = repo.GetById(id)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

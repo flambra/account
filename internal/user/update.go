@@ -25,9 +25,9 @@ func Update(c *fiber.Ctx) error {
 
 	var user domain.User
 	var request domain.UserUpdateRequest
-	userRepo := hRepository.New(hDb.Get(), &user, c)
+	repo := hRepository.New(hDb.Get(), &user, c)
 
-	err = userRepo.GetById(id)
+	err = repo.GetById(id)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
@@ -51,14 +51,6 @@ func Update(c *fiber.Ctx) error {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	// var count int64
-	// db.Model(&domain.User{}).Where("(email = ? or tax_number = ?) and id != ?", request.Email, request.TaxNumber, user.ID).Count(&count)
-	// if count > 0 {
-	// 	return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-	// 		"error": "Email or Cpf already in use",
-	// 	})
-	// }
-
 	hashedPassword, err := hPassword.Encrypt(request.Password)
 	if err != nil {
 		return err
@@ -75,7 +67,7 @@ func Update(c *fiber.Ctx) error {
 		UserType:       request.UserType,
 	}
 
-	err = userRepo.Save()
+	err = repo.Update(user, id)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

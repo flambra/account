@@ -9,9 +9,9 @@ import (
 )
 
 func Create(profile domain.Profile, c *fiber.Ctx) error {
-	profileRepo := hRepository.New(hDb.Get(), &profile, c)
+	repo := hRepository.New(hDb.Get(), &profile, c)
 
-	err := profileRepo.Create()
+	err := repo.Create()
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

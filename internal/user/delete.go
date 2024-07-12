@@ -23,14 +23,14 @@ func Delete(c *fiber.Ctx) error {
 	}
 
 	var user domain.User
-	userRepo := hRepository.New(hDb.Get(), &user, c)
+	repo := hRepository.New(hDb.Get(), &user, c)
 
-	err = userRepo.Delete(id)
+	err = repo.Delete(id)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	err = userRepo.GetDeleted(fiber.Map{"id": id})
+	err = repo.GetDeleted(fiber.Map{"id": id})
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

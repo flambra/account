@@ -10,11 +10,7 @@ import (
 )
 
 func Create(c *fiber.Ctx) error {
-
-	var user domain.User
 	var request domain.UserCreateRequest
-	userRepo := hRepository.New(hDb.Get(), &user, c)
-
 	if err := c.BodyParser(&request); err != nil {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
@@ -24,7 +20,9 @@ func Create(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err = userRepo.GetWhere(fiber.Map{"email": request.Email, "tax_number": request.TaxNumber}); err == nil {
+	var user domain.User
+	repo := hRepository.New(hDb.Get(), &user, c)
+	if err = repo.GetWhere(fiber.Map{"email": request.Email, "tax_number": request.TaxNumber}); err == nil {
 		return hResp.StatusConflict(c, &user, "Email or Cpf already in use")
 	}
 
@@ -39,7 +37,7 @@ func Create(c *fiber.Ctx) error {
 		UserType:       request.UserType,
 	}
 
-	err = userRepo.Create()
+	err = repo.Create()
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

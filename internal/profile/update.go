@@ -24,9 +24,9 @@ func Update(c *fiber.Ctx) error {
 
 	var profile domain.Profile
 	var request domain.ProfileUpdateRequest
-	profileRepo := hRepository.New(hDb.Get(), &profile, c)
+	repo := hRepository.New(hDb.Get(), &profile, c)
 
-	err = profileRepo.GetById(id)
+	err = repo.GetById(id)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
@@ -57,7 +57,7 @@ func Update(c *fiber.Ctx) error {
 	// 	})
 	// }
 
-	err = profileRepo.Save()
+	err = repo.Save()
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
