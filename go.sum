@@ -14,6 +14,8 @@ github.com/flambra/helpers v0.0.0-20240710185940-785082604715 h1:xlPfUWKb2lxQB6t
 github.com/flambra/helpers v0.0.0-20240710185940-785082604715/go.mod h1:uAU7pPzGU/isRH5qGyFLiQ5gdIEJCLG/SzDZgioDr/s=
 github.com/flambra/helpers v0.0.0-20240711015627-fd129fea2a32 h1:o6F/kr9nSgKmsC2O1QVj223atD37o0pVIiwCpfj/nrY=
 github.com/flambra/helpers v0.0.0-20240711015627-fd129fea2a32/go.mod h1:uAU7pPzGU/isRH5qGyFLiQ5gdIEJCLG/SzDZgioDr/s=
+github.com/flambra/helpers v0.0.0-20240712135126-27a84ed80bc1 h1:G4vzzVDaBXWOBoBTwf5f1NDLnhcygdILeeW7FEG6QmA=
+github.com/flambra/helpers v0.0.0-20240712135126-27a84ed80bc1/go.mod h1:uAU7pPzGU/isRH5qGyFLiQ5gdIEJCLG/SzDZgioDr/s=
 github.com/go-openapi/jsonpointer v0.21.0 h1:YgdVicSA9vH5RiHs9TZW5oyafXZFc6+2Vc1rr/O9oNQ=
 github.com/go-openapi/jsonpointer v0.21.0/go.mod h1:IUyH9l/+uyhIYQ/PXVA41Rexl+kOkAPDdXEYns6fzUY=
 github.com/go-openapi/jsonreference v0.21.0 h1:Rs+Y7hSXT83Jacb7kFyjn4ijOuVGSvOdF2+tg1TRrwQ=
