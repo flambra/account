@@ -15,6 +15,41 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/createuser": {
+            "get": {
+                "description": "Create a Token for Create User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Create a Token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hToken.Access"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/refreshtoken": {
             "post": {
                 "description": "Refresh an access token using a refresh token",
@@ -139,6 +174,12 @@ const docTemplate = `{
                 "summary": "Send 2FA code",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "description": "TwoFactor Generate Request",
                         "name": "request",
                         "in": "body",
@@ -190,6 +231,12 @@ const docTemplate = `{
                 ],
                 "summary": "Validate 2FA code",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "description": "TwoFactor Validate Request",
                         "name": "request",
@@ -244,6 +291,14 @@ const docTemplate = `{
                     "Profile"
                 ],
                 "summary": "List profiles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -283,6 +338,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get a profile",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "integer",
                         "description": "Profile ID",
@@ -326,6 +387,12 @@ const docTemplate = `{
                 "summary": "Update a profile",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "type": "integer",
                         "description": "Profile ID",
                         "name": "id",
@@ -365,6 +432,83 @@ const docTemplate = `{
             }
         },
         "/user": {
+            "get": {
+                "description": "Get a page of user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get a page",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by Name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by Address",
+                        "name": "address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by UserType",
+                        "name": "usertype",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hRepository.Paginator"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/hResp.DefaultResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new user with the provided details",
                 "consumes": [
@@ -378,6 +522,12 @@ const docTemplate = `{
                 ],
                 "summary": "Create a new user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "description": "User Create Request",
                         "name": "user",
@@ -431,6 +581,12 @@ const docTemplate = `{
                 "summary": "Get a user",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "type": "integer",
                         "description": "User ID",
                         "name": "id",
@@ -472,6 +628,12 @@ const docTemplate = `{
                 ],
                 "summary": "Update a user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "integer",
                         "description": "User ID",
@@ -523,6 +685,12 @@ const docTemplate = `{
                 ],
                 "summary": "Delete a user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer \u003caccess token\u003e",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "integer",
                         "description": "User ID",
@@ -805,6 +973,27 @@ const docTemplate = `{
                 "valid": {
                     "description": "Valid is true if Time is not NULL",
                     "type": "boolean"
+                }
+            }
+        },
+        "hRepository.Paginator": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "rows": {},
+                "sort": {
+                    "type": "string"
+                },
+                "total_pages": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
                 }
             }
         },

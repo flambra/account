@@ -165,6 +165,20 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
+  hRepository.Paginator:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      rows: {}
+      sort:
+        type: string
+      total_pages:
+        type: integer
+      total_rows:
+        type: integer
+    type: object
   hResp.DefaultResponse:
     description: Default response structure
     properties:
@@ -185,6 +199,29 @@ info:
   description: This API is for the Flambra Account service.
   title: Flambra Account API
 paths:
+  /auth/createuser:
+    get:
+      consumes:
+      - application/json
+      description: Create a Token for Create User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hToken.Access'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Create a Token
+      tags:
+      - Auth
   /auth/refreshtoken:
     post:
       consumes:
@@ -262,6 +299,10 @@ paths:
       - application/json
       description: Send a 2FA code to the user's email or phone
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: TwoFactor Generate Request
         in: body
         name: request
@@ -296,6 +337,10 @@ paths:
       - application/json
       description: Validate the 2FA code provided by the user
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: TwoFactor Validate Request
         in: body
         name: request
@@ -331,6 +376,11 @@ paths:
       consumes:
       - application/json
       description: List all profiles
+      parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       produces:
       - application/json
       responses:
@@ -357,6 +407,10 @@ paths:
       - application/json
       description: Get a profile by ID
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: Profile ID
         in: path
         name: id
@@ -385,6 +439,10 @@ paths:
       - application/json
       description: Update a profile's details by ID
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: Profile ID
         in: path
         name: id
@@ -415,11 +473,66 @@ paths:
       tags:
       - Profile
   /user:
+    get:
+      consumes:
+      - application/json
+      description: Get a page of user
+      parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort by
+        in: query
+        name: sort
+        type: string
+      - description: Search by Name
+        in: query
+        name: name
+        type: string
+      - description: Search by Address
+        in: query
+        name: address
+        type: string
+      - description: Search by UserType
+        in: query
+        name: usertype
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hRepository.Paginator'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/hResp.DefaultResponse'
+      summary: Get a page
+      tags:
+      - User
     post:
       consumes:
       - application/json
       description: Create a new user with the provided details
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: User Create Request
         in: body
         name: user
@@ -454,6 +567,10 @@ paths:
       - application/json
       description: Delete a user by ID
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: User ID
         in: path
         name: id
@@ -482,6 +599,10 @@ paths:
       - application/json
       description: Get a user by ID
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: User ID
         in: path
         name: id
@@ -510,6 +631,10 @@ paths:
       - application/json
       description: Update a user's details by ID
       parameters:
+      - description: Bearer <access token>
+        in: header
+        name: Authorization
+        type: string
       - description: User ID
         in: path
         name: id
