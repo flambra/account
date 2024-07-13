@@ -24,7 +24,6 @@ func InitializeRoutes(app *fiber.App) {
 
 	// Docs
 	app.Get("/swagger/*", swagger.HandlerDefault)
-	// hMiddleware.BasicAuth()
 
 	// Auth
 	app.Post("/auth/signin", auth.SignIn)
