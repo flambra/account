@@ -6,9 +6,22 @@ import (
 	_ "github.com/flambra/helpers/hToken"
 )
 
-//	@title						Flambra Account API
-//	@description				This API is for the Flambra Account service.
-//	@externalDocs.url			https://github.com/flambra/account
+//	@title				Flambra Account API
+//	@description		This API is for the Flambra Account service.
+//	@externalDocs.url	https://github.com/flambra/account
+
+// Token Create User godoc
+//
+//	@Summary		Create a Token
+//	@Description	Create a Token for Create User
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	hToken.Access
+//	@Failure		400	{object}	hResp.DefaultResponse
+//	@Failure		500	{object}	hResp.DefaultResponse
+//	@Router			/auth/createuser [get]
+func CreateUser() {}
 
 // SignIn godoc
 //
@@ -48,11 +61,12 @@ func RefreshToken() {}
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		domain.AuthTwoFactorGenerateRequest	true	"TwoFactor Generate Request"
-//	@Success		200		{object}	hResp.DefaultResponse				"2FA code sent successfully"
-//	@Failure		400		{object}	hResp.DefaultResponse
-//	@Failure		401		{object}	hResp.DefaultResponse
-//	@Failure		500		{object}	hResp.DefaultResponse
+//	@Param			Authorization	header		string								false	"Bearer <access token>"
+//	@Param			request			body		domain.AuthTwoFactorGenerateRequest	true	"TwoFactor Generate Request"
+//	@Success		200				{object}	hResp.DefaultResponse				"2FA code sent successfully"
+//	@Failure		400				{object}	hResp.DefaultResponse
+//	@Failure		401				{object}	hResp.DefaultResponse
+//	@Failure		500				{object}	hResp.DefaultResponse
 //	@Router			/auth/twofactor/send [post]
 func Send() {}
 
@@ -63,10 +77,11 @@ func Send() {}
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		domain.AuthTwoFactorValidateRequest	true	"TwoFactor Validate Request"
-//	@Success		200		{object}	map[string]string					"2FA code validated successfully"
-//	@Failure		400		{object}	hResp.DefaultResponse
-//	@Failure		401		{object}	hResp.DefaultResponse
-//	@Failure		500		{object}	hResp.DefaultResponse
+//	@Param			Authorization	header		string								false	"Bearer <access token>"
+//	@Param			request			body		domain.AuthTwoFactorValidateRequest	true	"TwoFactor Validate Request"
+//	@Success		200				{object}	map[string]string					"2FA code validated successfully"
+//	@Failure		400				{object}	hResp.DefaultResponse
+//	@Failure		401				{object}	hResp.DefaultResponse
+//	@Failure		500				{object}	hResp.DefaultResponse
 //	@Router			/auth/twofactor/validate [post]
 func Validate() {}
