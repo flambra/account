@@ -7,12 +7,6 @@ import (
 )
 
 func CreateUser(c *fiber.Ctx) error {
-	var request hToken.Access
-
-	if err := c.BodyParser(&request); err != nil {
-		return hResp.BadRequestResponse(c, err.Error())
-	}
-
 	data := map[string]interface{}{
 		"message": "Token for Create User",
 	}

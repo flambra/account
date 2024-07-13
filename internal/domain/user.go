@@ -46,12 +46,11 @@ type UserUpdateRequest struct {
 }
 
 type UserPageResponse struct {
-	ID        uint    `json:"id"`
-	FirstName string  `json:"firstname"`
-	LastName  string  `json:"lastname"`
-	Address   string  `json:"address"`
-	UserType  string  `json:"usertype"`
-	Profile   Profile `json:"profile"`
+	ID        uint   `json:"id"`
+	FirstName string `json:"firstname"`
+	LastName  string `json:"lastname"`
+	Address   string `json:"address"`
+	UserType  string `json:"usertype"`
 }
 
 type UserPageFilter struct {
