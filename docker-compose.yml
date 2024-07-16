@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   account:
+    build: .
     image: account:latest
     ports:
       - "8081:8081"
