@@ -8,6 +8,7 @@ import (
 	"github.com/flambra/account/internal/middleware"
 	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/account/internal/user"
+	"github.com/flambra/helpers/hMiddleware"
 	"github.com/flambra/helpers/hToken"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -23,8 +24,7 @@ func InitializeRoutes(app *fiber.App) {
 	})
 
 	// Docs
-	app.Get("/swagger/*", swagger.HandlerDefault)
-	// hMiddleware.BasicAuth()
+	app.Get("/swagger/*", hMiddleware.BasicAuth(), swagger.HandlerDefault)
 
 	// Auth
 	app.Post("/auth/signin", auth.SignIn)
