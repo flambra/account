@@ -488,12 +488,6 @@ const docTemplate = `{
                 "summary": "Create a new user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer \u003caccess token\u003e",
-                        "name": "Authorization",
-                        "in": "header"
-                    },
-                    {
                         "description": "User Create Request",
                         "name": "user",
                         "in": "body",

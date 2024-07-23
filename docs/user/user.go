@@ -17,12 +17,11 @@ import (
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorization	header		string						false	"Bearer <access token>"
-//	@Param			user			body		domain.UserCreateRequest	true	"User Create Request"
-//	@Success		201				{object}	domain.User
-//	@Failure		400				{object}	hResp.DefaultResponse
-//	@Failure		409				{object}	hResp.DefaultResponse
-//	@Failure		500				{object}	hResp.DefaultResponse
+//	@Param			user	body		domain.UserCreateRequest	true	"User Create Request"
+//	@Success		201		{object}	domain.User
+//	@Failure		400		{object}	hResp.DefaultResponse
+//	@Failure		409		{object}	hResp.DefaultResponse
+//	@Failure		500		{object}	hResp.DefaultResponse
 //	@Router			/user [post]
 func Create() {}
 

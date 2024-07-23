@@ -506,10 +506,6 @@ paths:
       - application/json
       description: Create a new user with the provided details
       parameters:
-      - description: Bearer <access token>
-        in: header
-        name: Authorization
-        type: string
       - description: User Create Request
         in: body
         name: user

@@ -29,7 +29,7 @@ func InitializeRoutes(app *fiber.App) {
 	app.Post("/auth/signin", auth.SignIn)
 	app.Post("/auth/refreshtoken", auth.RefreshToken)
 
-	app.Post("/user", hToken.Middleware, user.Create)
+	app.Post("/user", user.Create)
 	app.Get("/user/:id", hToken.Middleware, user.Read)
 	app.Put("/user/:id", hToken.Middleware, user.Update)
 	app.Delete("/user/:id", hToken.Middleware, user.Delete)
