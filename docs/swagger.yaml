@@ -199,29 +199,6 @@ info:
   description: This API is for the Flambra Account service.
   title: Flambra Account API
 paths:
-  /auth/createuser:
-    get:
-      consumes:
-      - application/json
-      description: Create a Token for Create User
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/hToken.Access'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/hResp.DefaultResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/hResp.DefaultResponse'
-      summary: Create a Token
-      tags:
-      - Auth
   /auth/refreshtoken:
     post:
       consumes:

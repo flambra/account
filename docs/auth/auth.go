@@ -6,23 +6,6 @@ import (
 	_ "github.com/flambra/helpers/hToken"
 )
 
-//	@title				Flambra Account API
-//	@description		This API is for the Flambra Account service.
-//	@externalDocs.url	https://github.com/flambra/account
-
-// Token Create User godoc
-//
-//	@Summary		Create a Token
-//	@Description	Create a Token for Create User
-//	@Tags			Auth
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{object}	hToken.Access
-//	@Failure		400	{object}	hResp.DefaultResponse
-//	@Failure		500	{object}	hResp.DefaultResponse
-//	@Router			/auth/createuser [get]
-func CreateUser() {}
-
 // SignIn godoc
 //
 //	@Summary		Sign in a user

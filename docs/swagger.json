@@ -6,41 +6,6 @@
         "contact": {}
     },
     "paths": {
-        "/auth/createuser": {
-            "get": {
-                "description": "Create a Token for Create User",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Create a Token",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/hToken.Access"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/hResp.DefaultResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/hResp.DefaultResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/auth/refreshtoken": {
             "post": {
                 "description": "Refresh an access token using a refresh token",

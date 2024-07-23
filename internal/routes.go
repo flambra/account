@@ -5,7 +5,6 @@ import (
 
 	"github.com/flambra/account/internal/auth"
 	"github.com/flambra/account/internal/auth/twoFactor"
-	"github.com/flambra/account/internal/middleware"
 	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/account/internal/user"
 	"github.com/flambra/helpers/hMiddleware"
@@ -29,9 +28,8 @@ func InitializeRoutes(app *fiber.App) {
 	// Auth
 	app.Post("/auth/signin", auth.SignIn)
 	app.Post("/auth/refreshtoken", auth.RefreshToken)
-	app.Get("/auth/createuser", auth.CreateUser)
 
-	app.Post("/user", hToken.Middleware, middleware.CreateUser, user.Create)
+	app.Post("/user", hToken.Middleware, user.Create)
 	app.Get("/user/:id", hToken.Middleware, user.Read)
 	app.Put("/user/:id", hToken.Middleware, user.Update)
 	app.Delete("/user/:id", hToken.Middleware, user.Delete)
