@@ -1,18 +1,19 @@
 package user
 
 import (
-	"encoding/json"
 	"strconv"
+	"time"
 
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/helpers/hDb"
-	"github.com/flambra/helpers/hPassword"
+	"github.com/flambra/helpers/hLog"
 	"github.com/flambra/helpers/hRepository"
 	"github.com/flambra/helpers/hResp"
 	"github.com/gofiber/fiber/v2"
 )
 
 func Update(c *fiber.Ctx) error {
+	defer hLog.Performance(time.Now(), "Update")
 	rawId := c.Params("id")
 	if rawId == "" {
 		return hResp.BadRequestResponse(c, "inform id")
@@ -27,11 +28,6 @@ func Update(c *fiber.Ctx) error {
 	var request domain.UserUpdateRequest
 	repo := hRepository.New(hDb.Get(), &user, c)
 
-	err = repo.GetById(id)
-	if err != nil {
-		return hResp.InternalServerErrorResponse(c, err.Error())
-	}
-
 	if err := c.BodyParser(&request); err != nil {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
@@ -41,33 +37,14 @@ func Update(c *fiber.Ctx) error {
 		return err
 	}
 
-	serialized, err := json.Marshal(&request)
-	if err != nil {
-		return hResp.InternalServerErrorResponse(c, err.Error())
-	}
-
-	err = json.Unmarshal(serialized, &user)
-	if err != nil {
-		return hResp.InternalServerErrorResponse(c, err.Error())
-	}
-
-	hashedPassword, err := hPassword.Encrypt(request.Password)
-	if err != nil {
-		return err
-	}
-
 	user = domain.User{
-		FirstName:      request.FirstName,
-		LastName:       request.LastName,
-		TaxNumber:      request.TaxNumber,
-		Email:          request.Email,
-		HashedPassword: hashedPassword,
-		Phone:          request.Phone,
-		Address:        request.Address,
-		UserType:       request.UserType,
+		FirstName: request.FirstName,
+		LastName:  request.LastName,
+		Address:   request.Address,
+		UserType:  request.UserType,
 	}
 
-	err = repo.Update(user, id)
+	err = repo.Update(&user, id)
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}

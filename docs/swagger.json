@@ -815,6 +815,9 @@
                 "address": {
                     "type": "string"
                 },
+                "birthDate": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -862,6 +865,9 @@
                 "address": {
                     "type": "string"
                 },
+                "birth_date": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -889,6 +895,9 @@
             "type": "object",
             "properties": {
                 "address": {
+                    "type": "string"
+                },
+                "birth_date": {
                     "type": "string"
                 },
                 "email": {

@@ -16,6 +16,8 @@ github.com/flambra/helpers v0.0.0-20240711015627-fd129fea2a32 h1:o6F/kr9nSgKmsC2
 github.com/flambra/helpers v0.0.0-20240711015627-fd129fea2a32/go.mod h1:uAU7pPzGU/isRH5qGyFLiQ5gdIEJCLG/SzDZgioDr/s=
 github.com/flambra/helpers v0.0.0-20240712135126-27a84ed80bc1 h1:G4vzzVDaBXWOBoBTwf5f1NDLnhcygdILeeW7FEG6QmA=
 github.com/flambra/helpers v0.0.0-20240712135126-27a84ed80bc1/go.mod h1:uAU7pPzGU/isRH5qGyFLiQ5gdIEJCLG/SzDZgioDr/s=
+github.com/flambra/helpers v0.0.0-20240724013624-2fd1291be2cd h1:SMhc3BECPp8CEddLiwXTnMD/jeH4lpt7fGJvnAUFARo=
+github.com/flambra/helpers v0.0.0-20240724013624-2fd1291be2cd/go.mod h1:uAU7pPzGU/isRH5qGyFLiQ5gdIEJCLG/SzDZgioDr/s=
 github.com/go-openapi/jsonpointer v0.21.0 h1:YgdVicSA9vH5RiHs9TZW5oyafXZFc6+2Vc1rr/O9oNQ=
 github.com/go-openapi/jsonpointer v0.21.0/go.mod h1:IUyH9l/+uyhIYQ/PXVA41Rexl+kOkAPDdXEYns6fzUY=
 github.com/go-openapi/jsonreference v0.21.0 h1:Rs+Y7hSXT83Jacb7kFyjn4ijOuVGSvOdF2+tg1TRrwQ=
@@ -79,6 +81,8 @@ github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWE
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/mattn/go-runewidth v0.0.15 h1:UNAjwbU9l54TA3KzvqLGxwWjHmMgBUVhBiTjelZgg3U=
 github.com/mattn/go-runewidth v0.0.15/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
+github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6TULQc=
+github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
 github.com/newrelic/go-agent/v3 v3.33.0 h1:0Phrvp6KWOcJPsIxskL9ZrVddhrZDl1xokNtTjN4GpQ=
 github.com/newrelic/go-agent/v3 v3.33.0/go.mod h1:SMdqPzE/ghkWdY0rYGSD7Clw2daK/XH6pUnVd4albg4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

@@ -92,6 +92,8 @@ definitions:
     properties:
       address:
         type: string
+      birthDate:
+        type: string
       createdAt:
         type: string
       deletedAt:
@@ -123,6 +125,8 @@ definitions:
     properties:
       address:
         type: string
+      birth_date:
+        type: string
       email:
         type: string
       first_name:
@@ -141,6 +145,8 @@ definitions:
   domain.UserUpdateRequest:
     properties:
       address:
+        type: string
+      birth_date:
         type: string
       email:
         type: string

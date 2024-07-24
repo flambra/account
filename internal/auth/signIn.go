@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/helpers/hDb"
+	"github.com/flambra/helpers/hPassword"
 	"github.com/flambra/helpers/hRepository"
 	"github.com/flambra/helpers/hResp"
 	"github.com/flambra/helpers/hToken"
@@ -19,6 +20,11 @@ func SignIn(c *fiber.Ctx) error {
 	}
 
 	err := repo.GetWhere(fiber.Map{"email": request.Email})
+	if err != nil {
+		return hResp.UnauthorizedResponse(c, "Invalid email or password")
+	}
+
+	err = hPassword.Decrypt(user.HashedPassword, request.Password)
 	if err != nil {
 		return hResp.UnauthorizedResponse(c, "Invalid email or password")
 	}

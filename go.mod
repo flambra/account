@@ -3,7 +3,7 @@ module github.com/flambra/account
 go 1.22
 
 require (
-	github.com/flambra/helpers v0.0.0-20240712135126-27a84ed80bc1
+	github.com/flambra/helpers v0.0.0-20240724013624-2fd1291be2cd
 	github.com/gofiber/contrib/fibernewrelic v1.2.2
 	github.com/gofiber/contrib/fiberzerolog v1.0.1
 	github.com/gofiber/fiber/v2 v2.52.5
@@ -35,7 +35,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.15 // indirect
+	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/newrelic/go-agent/v3 v3.33.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/swaggo/files/v2 v2.0.1 // indirect

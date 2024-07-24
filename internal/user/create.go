@@ -35,6 +35,7 @@ func Create(c *fiber.Ctx) error {
 		Phone:          request.Phone,
 		Address:        request.Address,
 		UserType:       request.UserType,
+		BirthDate:      request.BirthDate,
 	}
 
 	err = repo.Create()

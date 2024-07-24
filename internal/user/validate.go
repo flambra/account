@@ -21,7 +21,12 @@ func ValidateUserCreateRequest(request *domain.UserCreateRequest, c *fiber.Ctx) 
 		return hResp.BadRequestResponse(c, "inform email")
 	}
 
-	err := validateEmail(request.Email, c)
+	err := hValidate.BirthDate(request.BirthDate)
+	if err != nil {
+		return hResp.BadRequestResponse(c, err.Error())
+	}
+
+	err = validateEmail(request.Email, c)
 	if err != nil || c.Response().StatusCode() != 200 {
 		return err
 	}
@@ -36,7 +41,7 @@ func ValidateUserCreateRequest(request *domain.UserCreateRequest, c *fiber.Ctx) 
 		return hResp.BadRequestResponse(c, err.Error())
 	}
 
-	err = validatePassword(request, c)
+	err = validatePassword(request.Password, c)
 	if err != nil || c.Response().StatusCode() != 200 {
 		return err
 	}
@@ -44,15 +49,15 @@ func ValidateUserCreateRequest(request *domain.UserCreateRequest, c *fiber.Ctx) 
 }
 
 func ValidateUserUpdateRequest(request *domain.UserUpdateRequest, user *domain.User, c *fiber.Ctx) error {
-	if request.Email == "" {
+	if request.Email != "" {
 		request.Email = user.Email
+		err := validateEmail(request.Email, c)
+		if err != nil || c.Response().StatusCode() != 200 {
+			return err
+		}
 	}
 
-	err := validateEmail(request.Email, c)
-	if err != nil || c.Response().StatusCode() != 200 {
-		return err
-	}
-
+	var err error
 	if request.TaxNumber != "" {
 		request.TaxNumber, err = hValidate.CPF(request.TaxNumber)
 		if err != nil {
@@ -66,6 +71,22 @@ func ValidateUserUpdateRequest(request *domain.UserUpdateRequest, user *domain.U
 			return hResp.BadRequestResponse(c, err.Error())
 		}
 	}
+
+	if request.Password != "" {
+		err = validatePassword(request.Password, c)
+		if err != nil || c.Response().StatusCode() != 200 {
+			return err
+		}
+	}
+
+	if !request.BirthDate.IsZero() {
+		err := hValidate.BirthDate(request.BirthDate)
+		if err != nil {
+			return hResp.BadRequestResponse(c, err.Error())
+		}
+		user.BirthDate = request.BirthDate
+	}
+
 	return nil
 }
 
@@ -77,11 +98,11 @@ func validateEmail(email string, c *fiber.Ctx) error {
 	return nil
 }
 
-func validatePassword(request *domain.UserCreateRequest, c *fiber.Ctx) error {
-	if request.Password == "" {
+func validatePassword(password string, c *fiber.Ctx) error {
+	if password == "" {
 		return nil
 	}
-	enteredPass := request.Password
+	enteredPass := password
 	err := hPassword.Validate(enteredPass)
 	if err != nil {
 		return hResp.BadRequestResponse(c, err.Error())
@@ -91,6 +112,6 @@ func validatePassword(request *domain.UserCreateRequest, c *fiber.Ctx) error {
 	if err != nil {
 		return hResp.InternalServerErrorResponse(c, "failed to encrypt user password")
 	}
-	request.Password = encryptedPassword
+	password = encryptedPassword
 	return nil
 }

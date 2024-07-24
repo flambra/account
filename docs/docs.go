@@ -824,6 +824,9 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "birthDate": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -871,6 +874,9 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "birth_date": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -898,6 +904,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "address": {
+                    "type": "string"
+                },
+                "birth_date": {
                     "type": "string"
                 },
                 "email": {
