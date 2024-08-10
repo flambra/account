@@ -12,6 +12,7 @@ import (
 	"github.com/gofiber/contrib/fibernewrelic"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 )
@@ -58,6 +59,10 @@ func main() {
 
 	app.Use(fiberzerolog.New(fiberzerolog.Config{
 		Logger: &logger,
+	}))
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
 	}))
 
 	app.Use(fibernewrelic.New(cfg))
