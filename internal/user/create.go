@@ -22,20 +22,15 @@ func Create(c *fiber.Ctx) error {
 
 	var user domain.User
 	repo := hRepository.New(hDb.Get(), &user, c)
-	if err = repo.GetWhere(fiber.Map{"email": request.Email, "tax_number": request.TaxNumber}); err == nil {
+	if err = repo.GetWhere(fiber.Map{"email": request.Email}); err == nil {
 		return hResp.StatusConflict(c, &user, "Email or Cpf already in use")
 	}
 
 	user = domain.User{
 		FirstName:      request.FirstName,
 		LastName:       request.LastName,
-		TaxNumber:      request.TaxNumber,
 		Email:          request.Email,
 		HashedPassword: request.Password,
-		Phone:          request.Phone,
-		Address:        request.Address,
-		UserType:       request.UserType,
-		BirthDate:      request.BirthDate,
 	}
 
 	err = repo.Create()

@@ -11,25 +11,28 @@ type User struct {
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 	DeletedAt      gorm.DeletedAt `gorm:"index"`
-	FirstName      string
-	LastName       string
-	BirthDate      time.Time
-	TaxNumber      string
-	Email          string
-	HashedPassword string
-	Phone          string
-	Address        string
-	UserType       string
-	LastCode       string
-	Profile        Profile `gorm:"foreignKey:UserID"`
+	FirstName      string         `json:"first_name"`
+	LastName       string         `json:"last_name"`
+	BirthDate      time.Time      `json:"birth_date"`
+	TaxNumber      string         `json:"tax_number"`
+	Email          string         `json:"email"`
+	HashedPassword string         `json:"hashed_password"`
+	Phone          string         `json:"phone"`
+	Address        string         `json:"address"`
+	UserType       string         `json:"user_type"`
+	LastCode       string         `json:"last_code"`
+	Profile        Profile        `gorm:"foreignKey:UserID"`
 }
 
 type UserCreateRequest struct {
-	FirstName string    `json:"first_name"`
-	LastName  string    `json:"last_name"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}
+
+type UserCompleteRequest struct {
 	TaxNumber string    `json:"tax_number"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
 	Phone     string    `json:"phone"`
 	Address   string    `json:"address"`
 	UserType  string    `json:"user_type"`

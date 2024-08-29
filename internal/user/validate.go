@@ -9,6 +9,24 @@ import (
 )
 
 func ValidateUserCreateRequest(request *domain.UserCreateRequest, c *fiber.Ctx) error {
+	if request.Email == "" {
+		return hResp.BadRequestResponse(c, "inform email")
+	}
+
+	err := validateEmail(request.Email, c)
+	if err != nil || c.Response().StatusCode() != 200 {
+		return err
+	}
+
+	err = validatePassword(request.Password, c)
+	if err != nil || c.Response().StatusCode() != 200 {
+		return err
+	}
+
+	return nil
+}
+
+func ValidateUserCompleteRequest(request *domain.UserCompleteRequest, user *domain.User, c *fiber.Ctx) error {
 	if request.TaxNumber == "" {
 		return hResp.BadRequestResponse(c, "inform cpf")
 	}
@@ -17,34 +35,29 @@ func ValidateUserCreateRequest(request *domain.UserCreateRequest, c *fiber.Ctx) 
 		return hResp.BadRequestResponse(c, "inform phone")
 	}
 
-	if request.Email == "" {
-		return hResp.BadRequestResponse(c, "inform email")
+	var err error
+	if request.TaxNumber != "" {
+		request.TaxNumber, err = hValidate.CPF(request.TaxNumber)
+		if err != nil {
+			return hResp.BadRequestResponse(c, err.Error())
+		}
 	}
 
-	err := hValidate.BirthDate(request.BirthDate)
-	if err != nil {
-		return hResp.BadRequestResponse(c, err.Error())
+	if request.Phone != "" {
+		request.Phone, err = hValidate.Cellphone(request.Phone)
+		if err != nil {
+			return hResp.BadRequestResponse(c, err.Error())
+		}
 	}
 
-	err = validateEmail(request.Email, c)
-	if err != nil || c.Response().StatusCode() != 200 {
-		return err
+	if !request.BirthDate.IsZero() {
+		err := hValidate.BirthDate(request.BirthDate)
+		if err != nil {
+			return hResp.BadRequestResponse(c, err.Error())
+		}
+		user.BirthDate = request.BirthDate
 	}
 
-	request.Phone, err = hValidate.Cellphone(request.Phone)
-	if err != nil {
-		return hResp.BadRequestResponse(c, err.Error())
-	}
-
-	request.TaxNumber, err = hValidate.CPF(request.TaxNumber)
-	if err != nil {
-		return hResp.BadRequestResponse(c, err.Error())
-	}
-
-	err = validatePassword(request.Password, c)
-	if err != nil || c.Response().StatusCode() != 200 {
-		return err
-	}
 	return nil
 }
 
