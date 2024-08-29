@@ -4,6 +4,7 @@ import (
 	"github.com/flambra/account/internal/domain"
 	"github.com/flambra/account/internal/profile"
 	"github.com/flambra/helpers/hDb"
+	"github.com/flambra/helpers/hPassword"
 	"github.com/flambra/helpers/hRepository"
 	"github.com/flambra/helpers/hResp"
 	"github.com/gofiber/fiber/v2"
@@ -26,12 +27,17 @@ func Create(c *fiber.Ctx) error {
 		return hResp.StatusConflict(c, &user, "Email or Cpf already in use")
 	}
 
+	hashedPassword, err := hPassword.Encrypt(request.Password)
+	if err != nil {
+		return hResp.InternalServerErrorResponse(c, err.Error())
+	}
+
 	user = domain.User{
 		FirstName:      request.FirstName,
 		LastName:       request.LastName,
 		TaxNumber:      request.TaxNumber,
 		Email:          request.Email,
-		HashedPassword: request.Password,
+		HashedPassword: hashedPassword,
 		Phone:          request.Phone,
 		Address:        request.Address,
 		UserType:       request.UserType,
