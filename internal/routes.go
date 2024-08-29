@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/flambra/helpers/hMiddleware"
 	"os"
 
 	"github.com/flambra/account/internal/auth"
@@ -22,7 +23,7 @@ func InitializeRoutes(app *fiber.App) {
 	})
 
 	// Docs
-	app.Get("/swagger/*", swagger.HandlerDefault)
+	app.Get("/swagger/*", hMiddleware.BasicAuth(), swagger.HandlerDefault)
 
 	// Auth
 	app.Post("/auth/signin", auth.SignIn)
