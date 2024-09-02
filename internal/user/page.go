@@ -12,8 +12,8 @@ func Page(c *fiber.Ctx) error {
 	var response []domain.UserPageResponse
 	paginator := hRepository.BuildPaginator(&response)
 
-	var user []domain.User
-	repo := hRepository.New(hDb.Get(), &user, c)
+	var users []domain.User
+	repo := hRepository.New(hDb.Get(), &users, c)
 
 	err := c.QueryParser(paginator)
 	if err != nil {
@@ -31,5 +31,18 @@ func Page(c *fiber.Ctx) error {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
+	// Transforme `users` para `response`
+	response = make([]domain.UserPageResponse, len(users))
+	for i, user := range users {
+		response[i] = domain.UserPageResponse{
+			ID:        user.ID,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+			Address:   user.Address,
+			UserType:  user.UserType,
+		}
+	}
+
+	paginator.Rows = response
 	return hResp.SuccessResponse(c, paginator)
 }

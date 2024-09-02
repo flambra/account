@@ -21,7 +21,7 @@ type User struct {
 	Address        string         `json:"address"`
 	UserType       string         `json:"user_type"`
 	LastCode       string         `json:"last_code"`
-	Profile        Profile        `gorm:"foreignKey:UserID"`
+	Profile        *Profile       `gorm:"foreignKey:UserID"`
 }
 
 type UserCreateRequest struct {
@@ -60,11 +60,24 @@ type UserPageResponse struct {
 }
 
 type UserPageFilter struct {
-	Name     string `json:"name"`
-	Address  string `json:"address"`
-	UserType string `json:"usertype"`
+	Name      string `json:"name"`
+	Address   string `json:"address"`
+	UserType  string `json:"usertype"`
+	TaxNumber string `json:"tax_number"`
 }
 
 func (f *UserPageFilter) Apply(db *gorm.DB) *gorm.DB {
-	return db.Where("first_name LIKE ? OR last_name LIKE ? OR address LIKE ? OR user_type = ?", "%"+f.Name+"%", "%"+f.Name+"%", "%"+f.Address+"%", f.UserType)
+	if f.Name != "" {
+		db = db.Where("first_name LIKE ? OR last_name LIKE ?", "%"+f.Name+"%", "%"+f.Name+"%")
+	}
+	if f.Address != "" {
+		db = db.Where("address LIKE ?", "%"+f.Address+"%")
+	}
+	if f.UserType != "" {
+		db = db.Where("user_type = ?", f.UserType)
+	}
+	if f.TaxNumber != "" {
+		db = db.Where("tax_number LIKE ?", "%"+f.TaxNumber+"%")
+	}
+	return db
 }

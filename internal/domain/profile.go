@@ -7,7 +7,7 @@ import (
 )
 
 type Profile struct {
-	UserID             uint `gorm:"not null;autoIncrement:false"`
+	UserID             uint `gorm:"primaryKey;not null;autoIncrement:false"`
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 	DeletedAt          gorm.DeletedAt `gorm:"index"`

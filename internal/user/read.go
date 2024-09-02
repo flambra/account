@@ -1,6 +1,8 @@
 package user
 
 import (
+	"errors"
+	"gorm.io/gorm"
 	"strconv"
 
 	"github.com/flambra/account/internal/domain"
@@ -23,6 +25,15 @@ func Read(c *fiber.Ctx) error {
 
 	var user domain.User
 	repo := hRepository.New(hDb.Get(), &user, c)
+
+	db := hDb.Get()
+
+	if err := db.Preload("Profile").First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return hResp.NotFoundResponse(c, user, "user not found")
+		}
+		return hResp.InternalServerErrorResponse(c, err.Error())
+	}
 
 	err = repo.GetById(id)
 	if err != nil {

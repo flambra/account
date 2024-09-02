@@ -1,8 +1,6 @@
 package user
 
 import (
-	"errors"
-	"gorm.io/gorm"
 	"strconv"
 	"time"
 
@@ -30,15 +28,6 @@ func Complete(c *fiber.Ctx) error {
 	var request domain.UserCompleteRequest
 	repo := hRepository.New(hDb.Get(), &user, c)
 
-	db := hDb.Get()
-
-	if err := db.Preload("Profile").First(&user, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return hResp.NotFoundResponse(c, user, "user not found")
-		}
-		return hResp.InternalServerErrorResponse(c, err.Error())
-	}
-
 	if err := c.BodyParser(&request); err != nil {
 		return hResp.BadRequestResponse(c, err.Error())
 	}
@@ -55,8 +44,6 @@ func Complete(c *fiber.Ctx) error {
 		UserType:  request.UserType,
 		BirthDate: request.BirthDate,
 	}
-
-	user.Profile.UserID = user.ID
 
 	err = repo.Update(&user, id)
 	if err != nil {

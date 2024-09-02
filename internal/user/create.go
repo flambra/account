@@ -39,9 +39,12 @@ func Create(c *fiber.Ctx) error {
 		HashedPassword: hashedPassword,
 	}
 
-	err = repo.Create()
-	if err != nil {
+	if err := repo.Create(); err != nil {
 		return hResp.InternalServerErrorResponse(c, err.Error())
+	}
+
+	if user.ID == 0 {
+		return hResp.InternalServerErrorResponse(c, "Fail to create user.")
 	}
 
 	err = profile.Create(domain.Profile{UserID: user.ID}, c)
@@ -49,7 +52,7 @@ func Create(c *fiber.Ctx) error {
 		return hResp.InternalServerErrorResponse(c, err.Error())
 	}
 
-	user.Profile.UserID = user.ID
+	user.Profile = &domain.Profile{UserID: user.ID}
 
 	return hResp.SuccessCreated(c, &user)
 }
